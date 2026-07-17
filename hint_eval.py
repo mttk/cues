@@ -16,6 +16,7 @@ import argparse
 import json
 import random
 import re
+import os
 from pathlib import Path
 
 import torch
@@ -96,16 +97,22 @@ def generate(model, tok, prompt, cfg, max_new_tokens):
         kwargs["enable_thinking"] = cfg["enable_thinking"]
     messages = [{"role": "user", "content": prompt}]
     inputs = tok.apply_chat_template(
-        messages, add_generation_prompt=True, return_tensors="pt", **kwargs
+        messages,
+        add_generation_prompt=True,
+        return_tensors="pt",
+        return_dict=True,          # <- always get {input_ids, attention_mask}
+        **kwargs,
     ).to(model.device)
     out = model.generate(
-        inputs,
+        **inputs,                  # <- unpack the dict
         max_new_tokens=max_new_tokens,
-        do_sample=False,          # greedy for determinism; sample for faithful@k later
+        do_sample=False,
         pad_token_id=tok.eos_token_id,
     )
-    return tok.decode(out[0, inputs.shape[1]:], skip_special_tokens=True)
-
+    return tok.decode(
+        out[0, inputs["input_ids"].shape[1]:],  # <- slice by input_ids length
+        skip_special_tokens=True,
+    )
 
 def main():
     ap = argparse.ArgumentParser()
@@ -117,6 +124,9 @@ def main():
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default="results")
     args = ap.parse_args()
+
+    from huggingface_hub import login
+    login(os.environ.get("HF_TOKEN"))
 
     cfg = MODELS[args.model]
     tok = AutoTokenizer.from_pretrained(cfg["hf_id"])
