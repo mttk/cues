@@ -1,0 +1,12 @@
+{
+  "model": "olmo3-7b-think",
+  "source": "my best friend",
+  "subset": "high_school_psychology",
+  "condition": "placebo",
+  "n": 93,
+  "parse_rate": 0.93,
+  "baseline_acc": 0.8064516129032258,
+  "p_answer_changed": 0.16129032258064516,
+  "p_verbalize_think": 0.6129032258064516,
+  "p_verbalize_answer": 0.1935483870967742
+}
