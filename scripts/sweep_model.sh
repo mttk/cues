@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --partition=nlp      # partition
 #SBATCH --account=nlp      # account
-#SBATCH --gres=gpu:6000ADA:1        # Request 1 gpu type A40 > change to 2/1
+#SBATCH --gres=gpu:L40:1        # Request 1 gpu type A40 > change to 2/1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1 # Change to 2/1
 #SBATCH --mem=5GB
