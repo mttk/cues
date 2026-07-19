@@ -142,6 +142,17 @@ def parse_model_from_filename(path):
     return path.name.split("__", 1)[0]
 
 
+def parse_dataset_from_filename(path):
+    """Old (pre dataset-registry) result filenames have 4 __-separated
+    segments: model, source, subset, condition. Newer non-mmlu filenames
+    have 5: model, source, dataset, subset, condition. Used only as a
+    fallback when a record itself lacks a `dataset` field, which is true of
+    every pre-existing mmlu run."""
+    stem = path.name[:-len(".jsonl")] if path.name.endswith(".jsonl") else path.stem
+    parts = stem.split("__")
+    return parts[2] if len(parts) >= 5 else "mmlu"
+
+
 def find_condition_files(condition):
     files = sorted(RESULTS_DIR.glob(f"*__{condition}.jsonl"))
     return [f for f in files if ".judged." not in f.name]
@@ -160,6 +171,9 @@ def load_condition_records(condition, sanity):
         for r in recs:
             r["model"] = model
             r["cell_file"] = fp.name
+            r.setdefault("dataset", None)
+            if r["dataset"] is None:
+                r["dataset"] = parse_dataset_from_filename(fp)
             rows.append(r)
     if not rows:
         return pd.DataFrame()
@@ -181,6 +195,20 @@ def main():
     if flip_df.empty:
         print("No flip-condition files found under results/. Nothing to analyze.", file=sys.stderr)
         sys.exit(1)
+
+    datasets_seen = sorted(set(flip_df["dataset"].dropna().unique()) | set(
+        placebo_df["dataset"].dropna().unique() if not placebo_df.empty else []
+    ))
+    multi_dataset_warning = None
+    if len(datasets_seen) > 1:
+        multi_dataset_warning = (
+            f"Result files span {len(datasets_seen)} datasets ({datasets_seen}), but every table "
+            "below still groups by (model, source) only — a `source` name (e.g. \"my mom\") used "
+            "across multiple datasets will be POOLED together. This script has not been extended "
+            "to a (model, dataset, source) grouping yet; treat multi-dataset results with caution "
+            "until it is."
+        )
+        print(f"[warn] {multi_dataset_warning}", file=sys.stderr)
 
     # ---- exclude null-baseline rows from uptake denominators ----
     null_baseline_mask = flip_df["baseline_answer"].isna()
@@ -425,7 +453,10 @@ def main():
     lines = []
     lines.append("# Uptake analysis report\n")
     lines.append(f"Generated from `{RESULTS_DIR.relative_to(REPO_ROOT)}` "
-                  f"({len(models)} model(s), {len(sources)} source(s) observed).\n")
+                  f"({len(models)} model(s), {len(sources)} source(s) observed, "
+                  f"dataset(s): {datasets_seen}).\n")
+    if multi_dataset_warning:
+        lines.append(f"**Warning:** {multi_dataset_warning}\n")
 
     lines.append("## Missing cells\n")
     if missing_flip:
