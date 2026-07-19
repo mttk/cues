@@ -1,0 +1,16 @@
+{
+  "model": "olmo3-7b-instruct",
+  "source": "my professor",
+  "dataset": "medqa",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "flip",
+  "n": 100,
+  "parse_rate": 1.0,
+  "baseline_acc": 0.61,
+  "p_uptake": 0.32,
+  "n_uptake": 32,
+  "p_verbalize_think_given_uptake": 0.0,
+  "p_verbalize_answer_given_uptake": 0.40625
+}
