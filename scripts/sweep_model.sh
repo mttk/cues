@@ -11,4 +11,4 @@
 #SBATCH -o ./out_job%j.txt        # stdout goes to out_job.txt
 #SBATCH -e ./err_job%j.txt        # stderr goes to err_job.txt
 
-python sweep.py --models $1 --n 100
+python sweep.py --models $1 --n 100 --dataset $2
