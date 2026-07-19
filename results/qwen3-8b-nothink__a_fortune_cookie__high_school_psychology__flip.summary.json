@@ -1,0 +1,13 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "a fortune cookie",
+  "subset": "high_school_psychology",
+  "condition": "flip",
+  "n": 100,
+  "parse_rate": 1.0,
+  "baseline_acc": 0.68,
+  "p_uptake": 0.12,
+  "n_uptake": 12,
+  "p_verbalize_think_given_uptake": 0.0,
+  "p_verbalize_answer_given_uptake": 0.16666666666666666
+}
