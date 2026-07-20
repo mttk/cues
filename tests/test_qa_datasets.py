@@ -88,6 +88,28 @@ class TestLogiQA2(unittest.TestCase):
         row = {"text": "", "question": "Q", "options": ["a", "b"], "answer": 5}
         self.assertIsNone(_normalize_logiqa2(0, row, None))
 
+    def test_chinese_counterpart_row_skipped(self):
+        # datatune/LogiQA2.0 bundles the Chinese-translated logiqa2_zh rows
+        # in with the English ones under the same schema; only English rows
+        # should survive.
+        row = {"text": "", "question": "由此，可以推断出以下哪项？", "options": ["a", "b"], "answer": 0}
+        self.assertIsNone(_normalize_logiqa2(0, row, None))
+
+    def test_cjk_check_ignores_unicode_symbols_in_english_text(self):
+        # Circled-number enumerators (①②③④) and similar symbols are common
+        # in the genuine English rows and must not be mistaken for Chinese.
+        row = {"text": "", "question": "Rearrange ①②③④ correctly.",
+               "options": ["②①④③", "①②③④"], "answer": 1}
+        item = _normalize_logiqa2(0, row, None)
+        self.assertIsNotNone(item)
+        self.assertEqual(item["answer"], 1)
+
+    def test_nli_style_row_without_options_skipped(self):
+        # datatune/LogiQA2.0 also bundles logiqa2_nli rows, which have no
+        # `options` key at all.
+        row = {"premise": "...", "hypothesis": "...", "label": "entailment"}
+        self.assertIsNone(_normalize_logiqa2(0, row, None))
+
 
 class TestGsmMc(unittest.TestCase):
     def test_normalizes_ab_cd_row(self):

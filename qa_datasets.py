@@ -13,6 +13,7 @@ inside each loader so that hand-built-row unit tests (see tests/) never need
 network access or the `datasets` package installed.
 """
 
+import json
 import random
 import re
 
@@ -51,7 +52,7 @@ HF_IDS = {
     "mmlu": "cais/mmlu",
     "mmlu_pro": "TIGER-Lab/MMLU-Pro",
     "medqa": "GBaker/MedQA-USMLE-4-options",
-    "logiqa2": "baber/logiqa2",
+    "logiqa2": "datatune/LogiQA2.0",
     "gsm_mc": "guipenedo/gsm8k-mc",
     **AGIEVAL_CONFIGS,
 }
@@ -201,10 +202,24 @@ def _load_medqa(subset, split, n, seed):
 
 
 # --------------------------------------------------------------------------
-# logiqa2
+# logiqa2 — datatune/LogiQA2.0. Every split is a single `text` column whose
+# value is itself a JSON-encoded string, and the rows are an undifferentiated
+# mix of three original LogiQA 2.0 configs: the English MC set we want
+# ({question, options, answer, text}), its Chinese translation (same shape,
+# CJK content), and an NLI-reformulated set ({premise, hypothesis, label},
+# no `options`). _load_logiqa2 parses the JSON wrapper and _normalize_logiqa2
+# filters to the English MC rows only (dropped: NLI rows lack `options` and
+# are skipped by the missing-field check; Chinese rows are dropped by the CJK
+# check). Verified this recovers exactly 1572 English MC test rows, matching
+# the original LogiQA 2.0 English test set size.
 # --------------------------------------------------------------------------
 
+_CJK_RE = re.compile(r"[一-鿿]")
+
+
 def _normalize_logiqa2(orig_idx, row, subset):
+    """`row` is the dict already parsed from the raw `text` JSON string (see
+    _load_logiqa2) — not the raw HF row itself."""
     opts = row.get("options")
     ans = row.get("answer")
     question = row.get("question")
@@ -213,6 +228,8 @@ def _normalize_logiqa2(orig_idx, row, subset):
     if not (0 <= ans < len(opts)):
         return None
     passage = row.get("text") or ""
+    if _CJK_RE.search(question + "".join(opts) + passage):
+        return None  # Chinese-language counterpart row; English MC only
     full_question = f"{passage}\n\n{question}" if passage else question
     return {
         "question": full_question,
@@ -225,15 +242,23 @@ def _normalize_logiqa2(orig_idx, row, subset):
 def _load_logiqa2(subset, split, n, seed):
     from datasets import load_dataset
 
-    ds = load_dataset(HF_IDS["logiqa2"], "logiqa2", split=split, trust_remote_code=True)
-    candidates = list(enumerate(tqdm(ds, desc="logiqa2:scan")))
+    ds = load_dataset(HF_IDS["logiqa2"], split=split)
+    candidates = []
+    n_parse_fail = 0
+    for i, raw_row in enumerate(tqdm(ds, desc="logiqa2:scan")):
+        try:
+            candidates.append((i, json.loads(raw_row["text"])))
+        except (json.JSONDecodeError, TypeError):
+            n_parse_fail += 1
+    if n_parse_fail:
+        print(f"[logiqa2] skipped {n_parse_fail} row(s) with malformed JSON in the raw `text` field")
     items, skipped = _seeded_take(
         candidates, n, seed,
         lambda idx, row: _normalize_logiqa2(idx, row, subset),
         desc="logiqa2:sample",
     )
     if skipped:
-        print(f"[logiqa2] skipped {skipped} candidate(s) with missing fields")
+        print(f"[logiqa2] skipped {skipped} candidate(s) with missing fields or non-English (Chinese) content")
     return items
 
 

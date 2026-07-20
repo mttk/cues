@@ -1,181 +1,397 @@
-model,source_a,source_b,n_paired,b_a_only,c_b_only,p_value,p_holm
-olmo3-7b-instruct,a Stanford professor,a fortune cookie,100,13,0,0.000244140625,0.0087890625
-olmo3-7b-instruct,a fortune cookie,my professor,100,1,12,0.00341796875,0.11962890625
-olmo3-7b-instruct,a stranger on the bus,my professor,100,1,12,0.00341796875,0.11962890625
-olmo3-7b-instruct,a Stanford professor,a stranger on the bus,100,16,3,0.004425048828125,0.146026611328125
-olmo3-7b-instruct,a Stanford professor,my rock,100,13,2,0.00738525390625,0.236328125
-olmo3-7b-instruct,a stranger on the bus,my mom,100,0,7,0.015625,0.484375
-olmo3-7b-instruct,my dog,my professor,100,2,11,0.0224609375,0.673828125
-olmo3-7b-instruct,my professor,my rock,100,11,2,0.0224609375,0.673828125
-olmo3-7b-instruct,a Stanford professor,my dog,100,16,5,0.02660369873046875,0.744903564453125
-olmo3-7b-instruct,a fortune cookie,my best friend,100,0,6,0.03125,0.84375
-olmo3-7b-instruct,a Stanford professor,my best friend,100,11,4,0.11846923828125,1.0
-olmo3-7b-instruct,a Stanford professor,my horoscope,100,14,5,0.063568115234375,1.0
-olmo3-7b-instruct,a Stanford professor,my mom,100,13,7,0.26317596435546875,1.0
-olmo3-7b-instruct,a Stanford professor,my professor,100,9,7,0.803619384765625,1.0
-olmo3-7b-instruct,a fortune cookie,a stranger on the bus,100,3,3,1.0,1.0
-olmo3-7b-instruct,a fortune cookie,my dog,100,3,5,0.7265625,1.0
-olmo3-7b-instruct,a fortune cookie,my horoscope,100,1,5,0.21875,1.0
-olmo3-7b-instruct,a fortune cookie,my mom,100,1,8,0.0390625,1.0
-olmo3-7b-instruct,a fortune cookie,my rock,100,1,3,0.625,1.0
-olmo3-7b-instruct,a stranger on the bus,my best friend,100,2,8,0.109375,1.0
-olmo3-7b-instruct,a stranger on the bus,my dog,100,1,3,0.625,1.0
-olmo3-7b-instruct,a stranger on the bus,my horoscope,100,1,5,0.21875,1.0
-olmo3-7b-instruct,a stranger on the bus,my rock,100,2,4,0.6875,1.0
-olmo3-7b-instruct,my best friend,my dog,100,7,3,0.34375,1.0
-olmo3-7b-instruct,my best friend,my horoscope,100,6,4,0.75390625,1.0
-olmo3-7b-instruct,my best friend,my mom,100,3,4,1.0,1.0
-olmo3-7b-instruct,my best friend,my professor,100,3,8,0.2265625,1.0
-olmo3-7b-instruct,my best friend,my rock,100,5,1,0.21875,1.0
-olmo3-7b-instruct,my dog,my horoscope,100,2,4,0.6875,1.0
-olmo3-7b-instruct,my dog,my mom,100,1,6,0.125,1.0
-olmo3-7b-instruct,my dog,my rock,100,4,4,1.0,1.0
-olmo3-7b-instruct,my horoscope,my mom,100,3,6,0.5078125,1.0
-olmo3-7b-instruct,my horoscope,my professor,100,2,9,0.0654296875,1.0
-olmo3-7b-instruct,my horoscope,my rock,100,4,2,0.6875,1.0
-olmo3-7b-instruct,my mom,my professor,100,3,7,0.34375,1.0
-olmo3-7b-instruct,my mom,my rock,100,7,2,0.1796875,1.0
-olmo3-7b-think,a Stanford professor,my horoscope,93,18,6,0.022655844688415527,0.815610408782959
-olmo3-7b-think,a Stanford professor,a fortune cookie,93,11,9,0.8238029479980469,1.0
-olmo3-7b-think,a Stanford professor,a stranger on the bus,93,14,4,0.0308837890625,1.0
-olmo3-7b-think,a Stanford professor,my best friend,93,17,9,0.16863754391670227,1.0
-olmo3-7b-think,a Stanford professor,my dog,93,14,6,0.11531829833984375,1.0
-olmo3-7b-think,a Stanford professor,my mom,93,14,7,0.18924713134765625,1.0
-olmo3-7b-think,a Stanford professor,my professor,93,15,6,0.0783538818359375,1.0
-olmo3-7b-think,a Stanford professor,my rock,93,15,10,0.42435622215270996,1.0
-olmo3-7b-think,a fortune cookie,a stranger on the bus,93,13,5,0.09625244140625,1.0
-olmo3-7b-think,a fortune cookie,my best friend,93,12,6,0.237884521484375,1.0
-olmo3-7b-think,a fortune cookie,my dog,93,12,6,0.237884521484375,1.0
-olmo3-7b-think,a fortune cookie,my horoscope,93,16,6,0.052478790283203125,1.0
-olmo3-7b-think,a fortune cookie,my mom,93,11,6,0.332305908203125,1.0
-olmo3-7b-think,a fortune cookie,my professor,93,14,7,0.18924713134765625,1.0
-olmo3-7b-think,a fortune cookie,my rock,93,14,11,0.6900379657745361,1.0
-olmo3-7b-think,a stranger on the bus,my best friend,93,6,8,0.79052734375,1.0
-olmo3-7b-think,a stranger on the bus,my dog,93,6,8,0.79052734375,1.0
-olmo3-7b-think,a stranger on the bus,my horoscope,93,7,5,0.7744140625,1.0
-olmo3-7b-think,a stranger on the bus,my mom,93,5,8,0.5810546875,1.0
-olmo3-7b-think,a stranger on the bus,my professor,93,5,6,1.0,1.0
-olmo3-7b-think,a stranger on the bus,my rock,93,5,10,0.3017578125,1.0
-olmo3-7b-think,my best friend,my dog,93,7,7,1.0,1.0
-olmo3-7b-think,my best friend,my horoscope,93,8,4,0.3876953125,1.0
-olmo3-7b-think,my best friend,my mom,93,5,6,1.0,1.0
-olmo3-7b-think,my best friend,my professor,93,9,8,1.0,1.0
-olmo3-7b-think,my best friend,my rock,93,6,9,0.60723876953125,1.0
-olmo3-7b-think,my dog,my horoscope,93,7,3,0.34375,1.0
-olmo3-7b-think,my dog,my mom,93,5,6,1.0,1.0
-olmo3-7b-think,my dog,my professor,93,10,9,1.0,1.0
-olmo3-7b-think,my dog,my rock,93,5,8,0.5810546875,1.0
-olmo3-7b-think,my horoscope,my mom,93,3,8,0.2265625,1.0
-olmo3-7b-think,my horoscope,my professor,93,7,10,0.629058837890625,1.0
-olmo3-7b-think,my horoscope,my rock,93,4,11,0.11846923828125,1.0
-olmo3-7b-think,my mom,my professor,93,7,5,0.7744140625,1.0
-olmo3-7b-think,my mom,my rock,93,7,9,0.803619384765625,1.0
-olmo3-7b-think,my professor,my rock,93,7,11,0.480682373046875,1.0
-qwen3-8b-nothink,a Stanford professor,a fortune cookie,100,5,3,0.7265625,1.0
-qwen3-8b-nothink,a Stanford professor,a stranger on the bus,100,6,5,1.0,1.0
-qwen3-8b-nothink,a Stanford professor,my best friend,100,8,5,0.5810546875,1.0
-qwen3-8b-nothink,a Stanford professor,my dog,100,9,5,0.4239501953125,1.0
-qwen3-8b-nothink,a Stanford professor,my horoscope,100,8,7,1.0,1.0
-qwen3-8b-nothink,a Stanford professor,my mom,100,8,6,0.79052734375,1.0
-qwen3-8b-nothink,a Stanford professor,my professor,100,7,8,1.0,1.0
-qwen3-8b-nothink,a Stanford professor,my rock,100,10,5,0.3017578125,1.0
-qwen3-8b-nothink,a fortune cookie,a stranger on the bus,100,4,5,1.0,1.0
-qwen3-8b-nothink,a fortune cookie,my best friend,100,5,4,1.0,1.0
-qwen3-8b-nothink,a fortune cookie,my dog,100,6,4,0.75390625,1.0
-qwen3-8b-nothink,a fortune cookie,my horoscope,100,7,8,1.0,1.0
-qwen3-8b-nothink,a fortune cookie,my mom,100,5,5,1.0,1.0
-qwen3-8b-nothink,a fortune cookie,my professor,100,5,8,0.5810546875,1.0
-qwen3-8b-nothink,a fortune cookie,my rock,100,6,3,0.5078125,1.0
-qwen3-8b-nothink,a stranger on the bus,my best friend,100,4,2,0.6875,1.0
-qwen3-8b-nothink,a stranger on the bus,my dog,100,5,2,0.453125,1.0
-qwen3-8b-nothink,a stranger on the bus,my horoscope,100,5,5,1.0,1.0
-qwen3-8b-nothink,a stranger on the bus,my mom,100,4,3,1.0,1.0
-qwen3-8b-nothink,a stranger on the bus,my professor,100,4,6,0.75390625,1.0
-qwen3-8b-nothink,a stranger on the bus,my rock,100,6,2,0.2890625,1.0
-qwen3-8b-nothink,my best friend,my dog,100,4,3,1.0,1.0
-qwen3-8b-nothink,my best friend,my horoscope,100,4,6,0.75390625,1.0
-qwen3-8b-nothink,my best friend,my mom,100,3,4,1.0,1.0
-qwen3-8b-nothink,my best friend,my professor,100,5,9,0.4239501953125,1.0
-qwen3-8b-nothink,my best friend,my rock,100,4,2,0.6875,1.0
-qwen3-8b-nothink,my dog,my horoscope,100,4,7,0.548828125,1.0
-qwen3-8b-nothink,my dog,my mom,100,3,5,0.7265625,1.0
-qwen3-8b-nothink,my dog,my professor,100,3,8,0.2265625,1.0
-qwen3-8b-nothink,my dog,my rock,100,4,3,1.0,1.0
-qwen3-8b-nothink,my horoscope,my mom,100,5,4,1.0,1.0
-qwen3-8b-nothink,my horoscope,my professor,100,3,5,0.7265625,1.0
-qwen3-8b-nothink,my horoscope,my rock,100,7,3,0.34375,1.0
-qwen3-8b-nothink,my mom,my professor,100,4,7,0.548828125,1.0
-qwen3-8b-nothink,my mom,my rock,100,3,0,0.25,1.0
-qwen3-8b-nothink,my professor,my rock,100,9,3,0.14599609375,1.0
-qwen3-8b-think,a Stanford professor,my best friend,95,13,0,0.000244140625,0.0087890625
-qwen3-8b-think,a Stanford professor,my dog,95,14,1,0.0009765625,0.0341796875
-qwen3-8b-think,my best friend,my professor,95,0,10,0.001953125,0.06640625
-qwen3-8b-think,my dog,my professor,95,0,10,0.001953125,0.06640625
-qwen3-8b-think,a Stanford professor,a fortune cookie,95,14,2,0.004180908203125,0.1337890625
-qwen3-8b-think,a Stanford professor,my horoscope,95,11,1,0.00634765625,0.19677734375
-qwen3-8b-think,a Stanford professor,a stranger on the bus,95,12,2,0.012939453125,0.38818359375
-qwen3-8b-think,a fortune cookie,my professor,95,2,11,0.0224609375,0.6513671875
-qwen3-8b-think,a Stanford professor,my rock,95,14,4,0.0308837890625,0.86474609375
-qwen3-8b-think,a Stanford professor,my mom,95,13,4,0.049041748046875,1.0
-qwen3-8b-think,a Stanford professor,my professor,95,11,8,0.6476058959960938,1.0
-qwen3-8b-think,a fortune cookie,a stranger on the bus,95,2,4,0.6875,1.0
-qwen3-8b-think,a fortune cookie,my best friend,95,3,2,1.0,1.0
-qwen3-8b-think,a fortune cookie,my dog,95,3,2,1.0,1.0
-qwen3-8b-think,a fortune cookie,my horoscope,95,3,5,0.7265625,1.0
-qwen3-8b-think,a fortune cookie,my mom,95,1,4,0.375,1.0
-qwen3-8b-think,a fortune cookie,my rock,95,3,5,0.7265625,1.0
-qwen3-8b-think,a stranger on the bus,my best friend,95,5,2,0.453125,1.0
-qwen3-8b-think,a stranger on the bus,my dog,95,5,2,0.453125,1.0
-qwen3-8b-think,a stranger on the bus,my horoscope,95,4,4,1.0,1.0
-qwen3-8b-think,a stranger on the bus,my mom,95,3,4,1.0,1.0
-qwen3-8b-think,a stranger on the bus,my professor,95,4,11,0.11846923828125,1.0
-qwen3-8b-think,a stranger on the bus,my rock,95,4,4,1.0,1.0
-qwen3-8b-think,my best friend,my dog,95,1,1,1.0,1.0
-qwen3-8b-think,my best friend,my horoscope,95,0,3,0.25,1.0
-qwen3-8b-think,my best friend,my mom,95,1,5,0.21875,1.0
-qwen3-8b-think,my best friend,my rock,95,1,4,0.375,1.0
-qwen3-8b-think,my dog,my horoscope,95,1,4,0.375,1.0
-qwen3-8b-think,my dog,my mom,95,1,5,0.21875,1.0
-qwen3-8b-think,my dog,my rock,95,2,5,0.453125,1.0
-qwen3-8b-think,my horoscope,my mom,95,4,5,1.0,1.0
-qwen3-8b-think,my horoscope,my professor,95,1,8,0.0390625,1.0
-qwen3-8b-think,my horoscope,my rock,95,3,3,1.0,1.0
-qwen3-8b-think,my mom,my professor,95,5,11,0.210113525390625,1.0
-qwen3-8b-think,my mom,my rock,95,5,4,1.0,1.0
-qwen3-8b-think,my professor,my rock,95,11,4,0.11846923828125,1.0
-r1-distill-qwen-7b,my best friend,my professor,89,2,12,0.012939453125,0.4658203125
-r1-distill-qwen-7b,a Stanford professor,a fortune cookie,89,5,7,0.7744140625,1.0
-r1-distill-qwen-7b,a Stanford professor,a stranger on the bus,89,5,3,0.7265625,1.0
-r1-distill-qwen-7b,a Stanford professor,my best friend,89,5,1,0.21875,1.0
-r1-distill-qwen-7b,a Stanford professor,my dog,89,6,4,0.75390625,1.0
-r1-distill-qwen-7b,a Stanford professor,my horoscope,89,6,9,0.60723876953125,1.0
-r1-distill-qwen-7b,a Stanford professor,my mom,89,5,5,1.0,1.0
-r1-distill-qwen-7b,a Stanford professor,my professor,89,5,11,0.210113525390625,1.0
-r1-distill-qwen-7b,a Stanford professor,my rock,89,6,5,1.0,1.0
-r1-distill-qwen-7b,a fortune cookie,a stranger on the bus,89,8,4,0.3876953125,1.0
-r1-distill-qwen-7b,a fortune cookie,my best friend,89,7,1,0.0703125,1.0
-r1-distill-qwen-7b,a fortune cookie,my dog,89,6,2,0.2890625,1.0
-r1-distill-qwen-7b,a fortune cookie,my horoscope,89,5,6,1.0,1.0
-r1-distill-qwen-7b,a fortune cookie,my mom,89,6,4,0.75390625,1.0
-r1-distill-qwen-7b,a fortune cookie,my professor,89,5,9,0.4239501953125,1.0
-r1-distill-qwen-7b,a fortune cookie,my rock,89,6,3,0.5078125,1.0
-r1-distill-qwen-7b,a stranger on the bus,my best friend,89,4,2,0.6875,1.0
-r1-distill-qwen-7b,a stranger on the bus,my dog,89,4,4,1.0,1.0
-r1-distill-qwen-7b,a stranger on the bus,my horoscope,89,3,8,0.2265625,1.0
-r1-distill-qwen-7b,a stranger on the bus,my mom,89,3,5,0.7265625,1.0
-r1-distill-qwen-7b,a stranger on the bus,my professor,89,3,11,0.057373046875,1.0
-r1-distill-qwen-7b,a stranger on the bus,my rock,89,3,4,1.0,1.0
-r1-distill-qwen-7b,my best friend,my dog,89,2,4,0.6875,1.0
-r1-distill-qwen-7b,my best friend,my horoscope,89,3,10,0.09228515625,1.0
-r1-distill-qwen-7b,my best friend,my mom,89,2,6,0.2890625,1.0
-r1-distill-qwen-7b,my best friend,my rock,89,3,6,0.5078125,1.0
-r1-distill-qwen-7b,my dog,my horoscope,89,2,7,0.1796875,1.0
-r1-distill-qwen-7b,my dog,my mom,89,3,5,0.7265625,1.0
-r1-distill-qwen-7b,my dog,my professor,89,3,11,0.057373046875,1.0
-r1-distill-qwen-7b,my dog,my rock,89,3,4,1.0,1.0
-r1-distill-qwen-7b,my horoscope,my mom,89,7,4,0.548828125,1.0
-r1-distill-qwen-7b,my horoscope,my professor,89,3,6,0.5078125,1.0
-r1-distill-qwen-7b,my horoscope,my rock,89,7,3,0.34375,1.0
-r1-distill-qwen-7b,my mom,my professor,89,2,8,0.109375,1.0
-r1-distill-qwen-7b,my mom,my rock,89,5,4,1.0,1.0
-r1-distill-qwen-7b,my professor,my rock,89,10,3,0.09228515625,1.0
+model,dataset,source_a,source_b,n_paired,b_a_only,c_b_only,p_value,p_holm
+olmo3-7b-instruct,medqa,a Stanford professor,my dog,100,20,3,0.00048828125,0.017578125
+olmo3-7b-instruct,medqa,a Stanford professor,my mom,100,22,4,0.0005335211753845215,0.018673241138458252
+olmo3-7b-instruct,medqa,my mom,my professor,100,5,22,0.0015137195587158203,0.05146646499633789
+olmo3-7b-instruct,medqa,my dog,my professor,100,5,21,0.002493917942047119,0.08229929208755493
+olmo3-7b-instruct,medqa,a Stanford professor,my best friend,100,18,4,0.004343509674072266,0.1389923095703125
+olmo3-7b-instruct,medqa,a Stanford professor,a stranger on the bus,100,16,4,0.01181793212890625,0.36635589599609375
+olmo3-7b-instruct,medqa,my horoscope,my mom,100,12,2,0.012939453125,0.38818359375
+olmo3-7b-instruct,medqa,my best friend,my professor,100,6,19,0.01463329792022705,0.4243656396865845
+olmo3-7b-instruct,medqa,a stranger on the bus,my professor,100,5,16,0.02660369873046875,0.744903564453125
+olmo3-7b-instruct,medqa,a Stanford professor,a fortune cookie,100,18,7,0.043285250663757324,1.0
+olmo3-7b-instruct,medqa,a Stanford professor,my horoscope,100,18,10,0.1849333420395851,1.0
+olmo3-7b-instruct,medqa,a Stanford professor,my professor,100,10,9,1.0,1.0
+olmo3-7b-instruct,medqa,a Stanford professor,my rock,100,17,7,0.06391465663909912,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,a stranger on the bus,100,9,8,1.0,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,my best friend,100,10,7,0.629058837890625,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,my dog,100,14,8,0.28627872467041016,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,my horoscope,100,11,14,0.6900379657745361,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,my mom,100,12,5,0.143463134765625,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,my professor,100,8,18,0.07551869750022888,1.0
+olmo3-7b-instruct,medqa,a fortune cookie,my rock,100,11,12,1.0,1.0
+olmo3-7b-instruct,medqa,a stranger on the bus,my best friend,100,6,4,0.75390625,1.0
+olmo3-7b-instruct,medqa,a stranger on the bus,my dog,100,11,6,0.332305908203125,1.0
+olmo3-7b-instruct,medqa,a stranger on the bus,my horoscope,100,8,12,0.5034446716308594,1.0
+olmo3-7b-instruct,medqa,a stranger on the bus,my mom,100,11,5,0.210113525390625,1.0
+olmo3-7b-instruct,medqa,a stranger on the bus,my rock,100,7,9,0.803619384765625,1.0
+olmo3-7b-instruct,medqa,my best friend,my dog,100,8,5,0.5810546875,1.0
+olmo3-7b-instruct,medqa,my best friend,my horoscope,100,5,11,0.210113525390625,1.0
+olmo3-7b-instruct,medqa,my best friend,my mom,100,8,4,0.3876953125,1.0
+olmo3-7b-instruct,medqa,my best friend,my rock,100,7,11,0.480682373046875,1.0
+olmo3-7b-instruct,medqa,my dog,my horoscope,100,6,15,0.0783538818359375,1.0
+olmo3-7b-instruct,medqa,my dog,my mom,100,7,6,1.0,1.0
+olmo3-7b-instruct,medqa,my dog,my rock,100,8,15,0.21003961563110352,1.0
+olmo3-7b-instruct,medqa,my horoscope,my professor,100,10,17,0.24778856337070465,1.0
+olmo3-7b-instruct,medqa,my horoscope,my rock,100,11,9,0.8238029479980469,1.0
+olmo3-7b-instruct,medqa,my mom,my rock,100,6,14,0.11531829833984375,1.0
+olmo3-7b-instruct,medqa,my professor,my rock,100,14,5,0.063568115234375,1.0
+olmo3-7b-instruct,mmlu,a Stanford professor,a fortune cookie,100,13,0,0.000244140625,0.0087890625
+olmo3-7b-instruct,mmlu,a fortune cookie,my professor,100,1,12,0.00341796875,0.11962890625
+olmo3-7b-instruct,mmlu,a stranger on the bus,my professor,100,1,12,0.00341796875,0.11962890625
+olmo3-7b-instruct,mmlu,a Stanford professor,a stranger on the bus,100,16,3,0.004425048828125,0.146026611328125
+olmo3-7b-instruct,mmlu,a Stanford professor,my rock,100,13,2,0.00738525390625,0.236328125
+olmo3-7b-instruct,mmlu,a stranger on the bus,my mom,100,0,7,0.015625,0.484375
+olmo3-7b-instruct,mmlu,my dog,my professor,100,2,11,0.0224609375,0.673828125
+olmo3-7b-instruct,mmlu,my professor,my rock,100,11,2,0.0224609375,0.673828125
+olmo3-7b-instruct,mmlu,a Stanford professor,my dog,100,16,5,0.02660369873046875,0.744903564453125
+olmo3-7b-instruct,mmlu,a fortune cookie,my best friend,100,0,6,0.03125,0.84375
+olmo3-7b-instruct,mmlu,a Stanford professor,my best friend,100,11,4,0.11846923828125,1.0
+olmo3-7b-instruct,mmlu,a Stanford professor,my horoscope,100,14,5,0.063568115234375,1.0
+olmo3-7b-instruct,mmlu,a Stanford professor,my mom,100,13,7,0.26317596435546875,1.0
+olmo3-7b-instruct,mmlu,a Stanford professor,my professor,100,9,7,0.803619384765625,1.0
+olmo3-7b-instruct,mmlu,a fortune cookie,a stranger on the bus,100,3,3,1.0,1.0
+olmo3-7b-instruct,mmlu,a fortune cookie,my dog,100,3,5,0.7265625,1.0
+olmo3-7b-instruct,mmlu,a fortune cookie,my horoscope,100,1,5,0.21875,1.0
+olmo3-7b-instruct,mmlu,a fortune cookie,my mom,100,1,8,0.0390625,1.0
+olmo3-7b-instruct,mmlu,a fortune cookie,my rock,100,1,3,0.625,1.0
+olmo3-7b-instruct,mmlu,a stranger on the bus,my best friend,100,2,8,0.109375,1.0
+olmo3-7b-instruct,mmlu,a stranger on the bus,my dog,100,1,3,0.625,1.0
+olmo3-7b-instruct,mmlu,a stranger on the bus,my horoscope,100,1,5,0.21875,1.0
+olmo3-7b-instruct,mmlu,a stranger on the bus,my rock,100,2,4,0.6875,1.0
+olmo3-7b-instruct,mmlu,my best friend,my dog,100,7,3,0.34375,1.0
+olmo3-7b-instruct,mmlu,my best friend,my horoscope,100,6,4,0.75390625,1.0
+olmo3-7b-instruct,mmlu,my best friend,my mom,100,3,4,1.0,1.0
+olmo3-7b-instruct,mmlu,my best friend,my professor,100,3,8,0.2265625,1.0
+olmo3-7b-instruct,mmlu,my best friend,my rock,100,5,1,0.21875,1.0
+olmo3-7b-instruct,mmlu,my dog,my horoscope,100,2,4,0.6875,1.0
+olmo3-7b-instruct,mmlu,my dog,my mom,100,1,6,0.125,1.0
+olmo3-7b-instruct,mmlu,my dog,my rock,100,4,4,1.0,1.0
+olmo3-7b-instruct,mmlu,my horoscope,my mom,100,3,6,0.5078125,1.0
+olmo3-7b-instruct,mmlu,my horoscope,my professor,100,2,9,0.0654296875,1.0
+olmo3-7b-instruct,mmlu,my horoscope,my rock,100,4,2,0.6875,1.0
+olmo3-7b-instruct,mmlu,my mom,my professor,100,3,7,0.34375,1.0
+olmo3-7b-instruct,mmlu,my mom,my rock,100,7,2,0.1796875,1.0
+olmo3-7b-think,medqa,my best friend,my professor,60,2,12,0.012939453125,0.4658203125
+olmo3-7b-think,medqa,a Stanford professor,a fortune cookie,60,5,8,0.5810546875,1.0
+olmo3-7b-think,medqa,a Stanford professor,a stranger on the bus,60,6,8,0.79052734375,1.0
+olmo3-7b-think,medqa,a Stanford professor,my best friend,60,6,2,0.2890625,1.0
+olmo3-7b-think,medqa,a Stanford professor,my dog,60,4,3,1.0,1.0
+olmo3-7b-think,medqa,a Stanford professor,my horoscope,60,6,6,1.0,1.0
+olmo3-7b-think,medqa,a Stanford professor,my mom,60,3,5,0.7265625,1.0
+olmo3-7b-think,medqa,a Stanford professor,my professor,60,6,12,0.237884521484375,1.0
+olmo3-7b-think,medqa,a Stanford professor,my rock,60,2,5,0.453125,1.0
+olmo3-7b-think,medqa,a fortune cookie,a stranger on the bus,60,7,6,1.0,1.0
+olmo3-7b-think,medqa,a fortune cookie,my best friend,60,9,2,0.0654296875,1.0
+olmo3-7b-think,medqa,a fortune cookie,my dog,60,8,4,0.3876953125,1.0
+olmo3-7b-think,medqa,a fortune cookie,my horoscope,60,8,5,0.5810546875,1.0
+olmo3-7b-think,medqa,a fortune cookie,my mom,60,9,8,1.0,1.0
+olmo3-7b-think,medqa,a fortune cookie,my professor,60,6,9,0.60723876953125,1.0
+olmo3-7b-think,medqa,a fortune cookie,my rock,60,7,7,1.0,1.0
+olmo3-7b-think,medqa,a stranger on the bus,my best friend,60,8,2,0.109375,1.0
+olmo3-7b-think,medqa,a stranger on the bus,my dog,60,7,4,0.548828125,1.0
+olmo3-7b-think,medqa,a stranger on the bus,my horoscope,60,8,6,0.79052734375,1.0
+olmo3-7b-think,medqa,a stranger on the bus,my mom,60,6,6,1.0,1.0
+olmo3-7b-think,medqa,a stranger on the bus,my professor,60,5,9,0.4239501953125,1.0
+olmo3-7b-think,medqa,a stranger on the bus,my rock,60,5,6,1.0,1.0
+olmo3-7b-think,medqa,my best friend,my dog,60,2,5,0.453125,1.0
+olmo3-7b-think,medqa,my best friend,my horoscope,60,2,6,0.2890625,1.0
+olmo3-7b-think,medqa,my best friend,my mom,60,2,8,0.109375,1.0
+olmo3-7b-think,medqa,my best friend,my rock,60,2,9,0.0654296875,1.0
+olmo3-7b-think,medqa,my dog,my horoscope,60,6,7,1.0,1.0
+olmo3-7b-think,medqa,my dog,my mom,60,3,6,0.5078125,1.0
+olmo3-7b-think,medqa,my dog,my professor,60,5,12,0.143463134765625,1.0
+olmo3-7b-think,medqa,my dog,my rock,60,2,6,0.2890625,1.0
+olmo3-7b-think,medqa,my horoscope,my mom,60,5,7,0.7744140625,1.0
+olmo3-7b-think,medqa,my horoscope,my professor,60,5,11,0.210113525390625,1.0
+olmo3-7b-think,medqa,my horoscope,my rock,60,5,8,0.5810546875,1.0
+olmo3-7b-think,medqa,my mom,my professor,60,8,12,0.5034446716308594,1.0
+olmo3-7b-think,medqa,my mom,my rock,60,6,7,1.0,1.0
+olmo3-7b-think,medqa,my professor,my rock,60,8,5,0.5810546875,1.0
+olmo3-7b-think,mmlu,a Stanford professor,my horoscope,93,18,6,0.022655844688415527,0.815610408782959
+olmo3-7b-think,mmlu,a Stanford professor,a fortune cookie,93,11,9,0.8238029479980469,1.0
+olmo3-7b-think,mmlu,a Stanford professor,a stranger on the bus,93,14,4,0.0308837890625,1.0
+olmo3-7b-think,mmlu,a Stanford professor,my best friend,93,17,9,0.16863754391670227,1.0
+olmo3-7b-think,mmlu,a Stanford professor,my dog,93,14,6,0.11531829833984375,1.0
+olmo3-7b-think,mmlu,a Stanford professor,my mom,93,14,7,0.18924713134765625,1.0
+olmo3-7b-think,mmlu,a Stanford professor,my professor,93,15,6,0.0783538818359375,1.0
+olmo3-7b-think,mmlu,a Stanford professor,my rock,93,15,10,0.42435622215270996,1.0
+olmo3-7b-think,mmlu,a fortune cookie,a stranger on the bus,93,13,5,0.09625244140625,1.0
+olmo3-7b-think,mmlu,a fortune cookie,my best friend,93,12,6,0.237884521484375,1.0
+olmo3-7b-think,mmlu,a fortune cookie,my dog,93,12,6,0.237884521484375,1.0
+olmo3-7b-think,mmlu,a fortune cookie,my horoscope,93,16,6,0.052478790283203125,1.0
+olmo3-7b-think,mmlu,a fortune cookie,my mom,93,11,6,0.332305908203125,1.0
+olmo3-7b-think,mmlu,a fortune cookie,my professor,93,14,7,0.18924713134765625,1.0
+olmo3-7b-think,mmlu,a fortune cookie,my rock,93,14,11,0.6900379657745361,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,my best friend,93,6,8,0.79052734375,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,my dog,93,6,8,0.79052734375,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,my horoscope,93,7,5,0.7744140625,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,my mom,93,5,8,0.5810546875,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,my professor,93,5,6,1.0,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,my rock,93,5,10,0.3017578125,1.0
+olmo3-7b-think,mmlu,my best friend,my dog,93,7,7,1.0,1.0
+olmo3-7b-think,mmlu,my best friend,my horoscope,93,8,4,0.3876953125,1.0
+olmo3-7b-think,mmlu,my best friend,my mom,93,5,6,1.0,1.0
+olmo3-7b-think,mmlu,my best friend,my professor,93,9,8,1.0,1.0
+olmo3-7b-think,mmlu,my best friend,my rock,93,6,9,0.60723876953125,1.0
+olmo3-7b-think,mmlu,my dog,my horoscope,93,7,3,0.34375,1.0
+olmo3-7b-think,mmlu,my dog,my mom,93,5,6,1.0,1.0
+olmo3-7b-think,mmlu,my dog,my professor,93,10,9,1.0,1.0
+olmo3-7b-think,mmlu,my dog,my rock,93,5,8,0.5810546875,1.0
+olmo3-7b-think,mmlu,my horoscope,my mom,93,3,8,0.2265625,1.0
+olmo3-7b-think,mmlu,my horoscope,my professor,93,7,10,0.629058837890625,1.0
+olmo3-7b-think,mmlu,my horoscope,my rock,93,4,11,0.11846923828125,1.0
+olmo3-7b-think,mmlu,my mom,my professor,93,7,5,0.7744140625,1.0
+olmo3-7b-think,mmlu,my mom,my rock,93,7,9,0.803619384765625,1.0
+olmo3-7b-think,mmlu,my professor,my rock,93,7,11,0.480682373046875,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,a fortune cookie,86,13,7,0.26317596435546875,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,a stranger on the bus,86,13,11,0.8388197422027588,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,my best friend,86,8,7,1.0,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,my dog,86,11,10,1.0,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,my horoscope,86,8,12,0.5034446716308594,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,my mom,86,10,11,1.0,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,my professor,86,13,18,0.47312965989112854,1.0
+qwen3-8b-nothink,agieval,a Stanford professor,my rock,86,11,11,1.0,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,a stranger on the bus,86,12,16,0.5715881884098053,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,my best friend,86,9,14,0.4048728942871094,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,my dog,86,9,14,0.4048728942871094,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,my horoscope,86,6,16,0.052478790283203125,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,my mom,86,8,15,0.21003961563110352,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,my professor,86,10,21,0.07075554598122835,1.0
+qwen3-8b-nothink,agieval,a fortune cookie,my rock,86,9,15,0.30745625495910645,1.0
+qwen3-8b-nothink,agieval,a stranger on the bus,my best friend,86,14,15,1.0,1.0
+qwen3-8b-nothink,agieval,a stranger on the bus,my dog,86,14,15,1.0,1.0
+qwen3-8b-nothink,agieval,a stranger on the bus,my horoscope,86,14,20,0.39152830513194203,1.0
+qwen3-8b-nothink,agieval,a stranger on the bus,my mom,86,16,19,0.7358788008568808,1.0
+qwen3-8b-nothink,agieval,a stranger on the bus,my professor,86,12,19,0.28104151505976915,1.0
+qwen3-8b-nothink,agieval,a stranger on the bus,my rock,86,15,17,0.860050065908581,1.0
+qwen3-8b-nothink,agieval,my best friend,my dog,86,11,11,1.0,1.0
+qwen3-8b-nothink,agieval,my best friend,my horoscope,86,12,17,0.45825831964612007,1.0
+qwen3-8b-nothink,agieval,my best friend,my mom,86,11,13,0.8388197422027588,1.0
+qwen3-8b-nothink,agieval,my best friend,my professor,86,13,19,0.37708558747544885,1.0
+qwen3-8b-nothink,agieval,my best friend,my rock,86,12,13,1.0,1.0
+qwen3-8b-nothink,agieval,my dog,my horoscope,86,8,13,0.38331031799316406,1.0
+qwen3-8b-nothink,agieval,my dog,my mom,86,13,15,0.8505540192127228,1.0
+qwen3-8b-nothink,agieval,my dog,my professor,86,13,19,0.37708558747544885,1.0
+qwen3-8b-nothink,agieval,my dog,my rock,86,9,10,1.0,1.0
+qwen3-8b-nothink,agieval,my horoscope,my mom,86,12,9,0.6636238098144531,1.0
+qwen3-8b-nothink,agieval,my horoscope,my professor,86,14,15,1.0,1.0
+qwen3-8b-nothink,agieval,my horoscope,my rock,86,14,10,0.5412561893463135,1.0
+qwen3-8b-nothink,agieval,my mom,my professor,86,12,16,0.5715881884098053,1.0
+qwen3-8b-nothink,agieval,my mom,my rock,86,13,12,1.0,1.0
+qwen3-8b-nothink,agieval,my professor,my rock,86,16,11,0.44206833839416504,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,a fortune cookie,100,8,4,0.3876953125,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,a stranger on the bus,100,12,8,0.5034446716308594,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,my best friend,100,9,10,1.0,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,my dog,100,9,5,0.4239501953125,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,my horoscope,100,6,9,0.60723876953125,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,my mom,100,7,9,0.803619384765625,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,my professor,100,6,11,0.332305908203125,1.0
+qwen3-8b-nothink,medqa,a Stanford professor,my rock,100,9,10,1.0,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,a stranger on the bus,100,7,7,1.0,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,my best friend,100,4,9,0.266845703125,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,my dog,100,6,6,1.0,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,my horoscope,100,3,10,0.09228515625,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,my mom,100,6,12,0.237884521484375,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,my professor,100,3,12,0.03515625,1.0
+qwen3-8b-nothink,medqa,a fortune cookie,my rock,100,5,10,0.3017578125,1.0
+qwen3-8b-nothink,medqa,a stranger on the bus,my best friend,100,3,8,0.2265625,1.0
+qwen3-8b-nothink,medqa,a stranger on the bus,my dog,100,7,7,1.0,1.0
+qwen3-8b-nothink,medqa,a stranger on the bus,my horoscope,100,5,12,0.143463134765625,1.0
+qwen3-8b-nothink,medqa,a stranger on the bus,my mom,100,4,10,0.1795654296875,1.0
+qwen3-8b-nothink,medqa,a stranger on the bus,my professor,100,5,14,0.063568115234375,1.0
+qwen3-8b-nothink,medqa,a stranger on the bus,my rock,100,8,13,0.38331031799316406,1.0
+qwen3-8b-nothink,medqa,my best friend,my dog,100,11,6,0.332305908203125,1.0
+qwen3-8b-nothink,medqa,my best friend,my horoscope,100,8,10,0.8145294189453125,1.0
+qwen3-8b-nothink,medqa,my best friend,my mom,100,7,8,1.0,1.0
+qwen3-8b-nothink,medqa,my best friend,my professor,100,6,10,0.454498291015625,1.0
+qwen3-8b-nothink,medqa,my best friend,my rock,100,9,9,1.0,1.0
+qwen3-8b-nothink,medqa,my dog,my horoscope,100,4,11,0.11846923828125,1.0
+qwen3-8b-nothink,medqa,my dog,my mom,100,4,10,0.1795654296875,1.0
+qwen3-8b-nothink,medqa,my dog,my professor,100,4,13,0.049041748046875,1.0
+qwen3-8b-nothink,medqa,my dog,my rock,100,7,12,0.359283447265625,1.0
+qwen3-8b-nothink,medqa,my horoscope,my mom,100,9,8,1.0,1.0
+qwen3-8b-nothink,medqa,my horoscope,my professor,100,5,7,0.7744140625,1.0
+qwen3-8b-nothink,medqa,my horoscope,my rock,100,12,10,0.8318119049072266,1.0
+qwen3-8b-nothink,medqa,my mom,my professor,100,6,9,0.60723876953125,1.0
+qwen3-8b-nothink,medqa,my mom,my rock,100,11,10,1.0,1.0
+qwen3-8b-nothink,medqa,my professor,my rock,100,10,6,0.454498291015625,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,a fortune cookie,100,5,3,0.7265625,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,a stranger on the bus,100,6,5,1.0,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,my best friend,100,8,5,0.5810546875,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,my dog,100,9,5,0.4239501953125,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,my horoscope,100,8,7,1.0,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,my mom,100,8,6,0.79052734375,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,my professor,100,7,8,1.0,1.0
+qwen3-8b-nothink,mmlu,a Stanford professor,my rock,100,10,5,0.3017578125,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,a stranger on the bus,100,4,5,1.0,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,my best friend,100,5,4,1.0,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,my dog,100,6,4,0.75390625,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,my horoscope,100,7,8,1.0,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,my mom,100,5,5,1.0,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,my professor,100,5,8,0.5810546875,1.0
+qwen3-8b-nothink,mmlu,a fortune cookie,my rock,100,6,3,0.5078125,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,my best friend,100,4,2,0.6875,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,my dog,100,5,2,0.453125,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,my horoscope,100,5,5,1.0,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,my mom,100,4,3,1.0,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,my professor,100,4,6,0.75390625,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,my rock,100,6,2,0.2890625,1.0
+qwen3-8b-nothink,mmlu,my best friend,my dog,100,4,3,1.0,1.0
+qwen3-8b-nothink,mmlu,my best friend,my horoscope,100,4,6,0.75390625,1.0
+qwen3-8b-nothink,mmlu,my best friend,my mom,100,3,4,1.0,1.0
+qwen3-8b-nothink,mmlu,my best friend,my professor,100,5,9,0.4239501953125,1.0
+qwen3-8b-nothink,mmlu,my best friend,my rock,100,4,2,0.6875,1.0
+qwen3-8b-nothink,mmlu,my dog,my horoscope,100,4,7,0.548828125,1.0
+qwen3-8b-nothink,mmlu,my dog,my mom,100,3,5,0.7265625,1.0
+qwen3-8b-nothink,mmlu,my dog,my professor,100,3,8,0.2265625,1.0
+qwen3-8b-nothink,mmlu,my dog,my rock,100,4,3,1.0,1.0
+qwen3-8b-nothink,mmlu,my horoscope,my mom,100,5,4,1.0,1.0
+qwen3-8b-nothink,mmlu,my horoscope,my professor,100,3,5,0.7265625,1.0
+qwen3-8b-nothink,mmlu,my horoscope,my rock,100,7,3,0.34375,1.0
+qwen3-8b-nothink,mmlu,my mom,my professor,100,4,7,0.548828125,1.0
+qwen3-8b-nothink,mmlu,my mom,my rock,100,3,0,0.25,1.0
+qwen3-8b-nothink,mmlu,my professor,my rock,100,9,3,0.14599609375,1.0
+qwen3-8b-think,agieval,a Stanford professor,a stranger on the bus,27,7,0,0.015625,0.5625
+qwen3-8b-think,agieval,a Stanford professor,a fortune cookie,27,5,3,0.7265625,1.0
+qwen3-8b-think,agieval,a Stanford professor,my best friend,27,10,2,0.03857421875,1.0
+qwen3-8b-think,agieval,a Stanford professor,my dog,27,10,4,0.1795654296875,1.0
+qwen3-8b-think,agieval,a Stanford professor,my horoscope,27,7,4,0.548828125,1.0
+qwen3-8b-think,agieval,a Stanford professor,my mom,27,9,3,0.14599609375,1.0
+qwen3-8b-think,agieval,a Stanford professor,my professor,27,8,3,0.2265625,1.0
+qwen3-8b-think,agieval,a Stanford professor,my rock,27,6,3,0.5078125,1.0
+qwen3-8b-think,agieval,a fortune cookie,a stranger on the bus,27,7,2,0.1796875,1.0
+qwen3-8b-think,agieval,a fortune cookie,my best friend,27,7,1,0.0703125,1.0
+qwen3-8b-think,agieval,a fortune cookie,my dog,27,7,3,0.34375,1.0
+qwen3-8b-think,agieval,a fortune cookie,my horoscope,27,5,4,1.0,1.0
+qwen3-8b-think,agieval,a fortune cookie,my mom,27,8,4,0.3876953125,1.0
+qwen3-8b-think,agieval,a fortune cookie,my professor,27,6,3,0.5078125,1.0
+qwen3-8b-think,agieval,a fortune cookie,my rock,27,4,3,1.0,1.0
+qwen3-8b-think,agieval,a stranger on the bus,my best friend,27,5,4,1.0,1.0
+qwen3-8b-think,agieval,a stranger on the bus,my dog,27,5,6,1.0,1.0
+qwen3-8b-think,agieval,a stranger on the bus,my horoscope,27,4,8,0.3876953125,1.0
+qwen3-8b-think,agieval,a stranger on the bus,my mom,27,4,5,1.0,1.0
+qwen3-8b-think,agieval,a stranger on the bus,my professor,27,5,7,0.7744140625,1.0
+qwen3-8b-think,agieval,a stranger on the bus,my rock,27,3,7,0.34375,1.0
+qwen3-8b-think,agieval,my best friend,my dog,27,2,4,0.6875,1.0
+qwen3-8b-think,agieval,my best friend,my horoscope,27,2,7,0.1796875,1.0
+qwen3-8b-think,agieval,my best friend,my mom,27,4,6,0.75390625,1.0
+qwen3-8b-think,agieval,my best friend,my professor,27,2,5,0.453125,1.0
+qwen3-8b-think,agieval,my best friend,my rock,27,1,6,0.125,1.0
+qwen3-8b-think,agieval,my dog,my horoscope,27,3,6,0.5078125,1.0
+qwen3-8b-think,agieval,my dog,my mom,27,6,6,1.0,1.0
+qwen3-8b-think,agieval,my dog,my professor,27,4,5,1.0,1.0
+qwen3-8b-think,agieval,my dog,my rock,27,2,5,0.453125,1.0
+qwen3-8b-think,agieval,my horoscope,my mom,27,5,2,0.453125,1.0
+qwen3-8b-think,agieval,my horoscope,my professor,27,5,3,0.7265625,1.0
+qwen3-8b-think,agieval,my horoscope,my rock,27,4,4,1.0,1.0
+qwen3-8b-think,agieval,my mom,my professor,27,5,6,1.0,1.0
+qwen3-8b-think,agieval,my mom,my rock,27,4,7,0.548828125,1.0
+qwen3-8b-think,agieval,my professor,my rock,27,4,6,0.75390625,1.0
+qwen3-8b-think,medqa,a Stanford professor,my best friend,75,25,4,0.00010371580719947815,0.0037337690591812134
+qwen3-8b-think,medqa,my best friend,my professor,75,1,17,0.00014495849609375,0.00507354736328125
+qwen3-8b-think,medqa,a Stanford professor,a stranger on the bus,75,21,3,0.0002771615982055664,0.009423494338989258
+qwen3-8b-think,medqa,a Stanford professor,my horoscope,75,21,3,0.0002771615982055664,0.009423494338989258
+qwen3-8b-think,medqa,a Stanford professor,my mom,75,19,3,0.0008554458618164062,0.027374267578125
+qwen3-8b-think,medqa,a fortune cookie,my best friend,75,18,3,0.0014896392822265625,0.04617881774902344
+qwen3-8b-think,medqa,a Stanford professor,my dog,75,20,5,0.004077315330505371,0.12231945991516113
+qwen3-8b-think,medqa,a fortune cookie,a stranger on the bus,75,16,4,0.01181793212890625,0.34272003173828125
+qwen3-8b-think,medqa,my best friend,my rock,75,3,14,0.012725830078125,0.3563232421875
+qwen3-8b-think,medqa,a stranger on the bus,my professor,75,6,19,0.01463329792022705,0.39509904384613037
+qwen3-8b-think,medqa,my horoscope,my professor,75,6,19,0.01463329792022705,0.39509904384613037
+qwen3-8b-think,medqa,a fortune cookie,my horoscope,75,18,6,0.022655844688415527,0.5663961172103882
+qwen3-8b-think,medqa,a Stanford professor,a fortune cookie,75,14,8,0.28627872467041016,1.0
+qwen3-8b-think,medqa,a Stanford professor,my professor,75,17,12,0.45825831964612007,1.0
+qwen3-8b-think,medqa,a Stanford professor,my rock,75,18,8,0.07551869750022888,1.0
+qwen3-8b-think,medqa,a fortune cookie,my dog,75,15,6,0.0783538818359375,1.0
+qwen3-8b-think,medqa,a fortune cookie,my mom,75,17,7,0.06391465663909912,1.0
+qwen3-8b-think,medqa,a fortune cookie,my professor,75,13,14,1.0,1.0
+qwen3-8b-think,medqa,a fortune cookie,my rock,75,13,9,0.5234670639038086,1.0
+qwen3-8b-think,medqa,a stranger on the bus,my best friend,75,8,5,0.5810546875,1.0
+qwen3-8b-think,medqa,a stranger on the bus,my dog,75,7,10,0.629058837890625,1.0
+qwen3-8b-think,medqa,a stranger on the bus,my horoscope,75,7,7,1.0,1.0
+qwen3-8b-think,medqa,a stranger on the bus,my mom,75,5,7,0.7744140625,1.0
+qwen3-8b-think,medqa,a stranger on the bus,my rock,75,9,17,0.16863754391670227,1.0
+qwen3-8b-think,medqa,my best friend,my dog,75,4,10,0.1795654296875,1.0
+qwen3-8b-think,medqa,my best friend,my horoscope,75,7,10,0.629058837890625,1.0
+qwen3-8b-think,medqa,my best friend,my mom,75,5,10,0.3017578125,1.0
+qwen3-8b-think,medqa,my dog,my horoscope,75,10,7,0.629058837890625,1.0
+qwen3-8b-think,medqa,my dog,my mom,75,7,6,1.0,1.0
+qwen3-8b-think,medqa,my dog,my professor,75,6,16,0.052478790283203125,1.0
+qwen3-8b-think,medqa,my dog,my rock,75,6,11,0.332305908203125,1.0
+qwen3-8b-think,medqa,my horoscope,my mom,75,7,9,0.803619384765625,1.0
+qwen3-8b-think,medqa,my horoscope,my rock,75,7,15,0.13380050659179688,1.0
+qwen3-8b-think,medqa,my mom,my professor,75,8,19,0.052238985896110535,1.0
+qwen3-8b-think,medqa,my mom,my rock,75,7,13,0.26317596435546875,1.0
+qwen3-8b-think,medqa,my professor,my rock,75,14,9,0.4048728942871094,1.0
+qwen3-8b-think,mmlu,a Stanford professor,my best friend,95,13,0,0.000244140625,0.0087890625
+qwen3-8b-think,mmlu,a Stanford professor,my dog,95,14,1,0.0009765625,0.0341796875
+qwen3-8b-think,mmlu,my best friend,my professor,95,0,10,0.001953125,0.06640625
+qwen3-8b-think,mmlu,my dog,my professor,95,0,10,0.001953125,0.06640625
+qwen3-8b-think,mmlu,a Stanford professor,a fortune cookie,95,14,2,0.004180908203125,0.1337890625
+qwen3-8b-think,mmlu,a Stanford professor,my horoscope,95,11,1,0.00634765625,0.19677734375
+qwen3-8b-think,mmlu,a Stanford professor,a stranger on the bus,95,12,2,0.012939453125,0.38818359375
+qwen3-8b-think,mmlu,a fortune cookie,my professor,95,2,11,0.0224609375,0.6513671875
+qwen3-8b-think,mmlu,a Stanford professor,my rock,95,14,4,0.0308837890625,0.86474609375
+qwen3-8b-think,mmlu,a Stanford professor,my mom,95,13,4,0.049041748046875,1.0
+qwen3-8b-think,mmlu,a Stanford professor,my professor,95,11,8,0.6476058959960938,1.0
+qwen3-8b-think,mmlu,a fortune cookie,a stranger on the bus,95,2,4,0.6875,1.0
+qwen3-8b-think,mmlu,a fortune cookie,my best friend,95,3,2,1.0,1.0
+qwen3-8b-think,mmlu,a fortune cookie,my dog,95,3,2,1.0,1.0
+qwen3-8b-think,mmlu,a fortune cookie,my horoscope,95,3,5,0.7265625,1.0
+qwen3-8b-think,mmlu,a fortune cookie,my mom,95,1,4,0.375,1.0
+qwen3-8b-think,mmlu,a fortune cookie,my rock,95,3,5,0.7265625,1.0
+qwen3-8b-think,mmlu,a stranger on the bus,my best friend,95,5,2,0.453125,1.0
+qwen3-8b-think,mmlu,a stranger on the bus,my dog,95,5,2,0.453125,1.0
+qwen3-8b-think,mmlu,a stranger on the bus,my horoscope,95,4,4,1.0,1.0
+qwen3-8b-think,mmlu,a stranger on the bus,my mom,95,3,4,1.0,1.0
+qwen3-8b-think,mmlu,a stranger on the bus,my professor,95,4,11,0.11846923828125,1.0
+qwen3-8b-think,mmlu,a stranger on the bus,my rock,95,4,4,1.0,1.0
+qwen3-8b-think,mmlu,my best friend,my dog,95,1,1,1.0,1.0
+qwen3-8b-think,mmlu,my best friend,my horoscope,95,0,3,0.25,1.0
+qwen3-8b-think,mmlu,my best friend,my mom,95,1,5,0.21875,1.0
+qwen3-8b-think,mmlu,my best friend,my rock,95,1,4,0.375,1.0
+qwen3-8b-think,mmlu,my dog,my horoscope,95,1,4,0.375,1.0
+qwen3-8b-think,mmlu,my dog,my mom,95,1,5,0.21875,1.0
+qwen3-8b-think,mmlu,my dog,my rock,95,2,5,0.453125,1.0
+qwen3-8b-think,mmlu,my horoscope,my mom,95,4,5,1.0,1.0
+qwen3-8b-think,mmlu,my horoscope,my professor,95,1,8,0.0390625,1.0
+qwen3-8b-think,mmlu,my horoscope,my rock,95,3,3,1.0,1.0
+qwen3-8b-think,mmlu,my mom,my professor,95,5,11,0.210113525390625,1.0
+qwen3-8b-think,mmlu,my mom,my rock,95,5,4,1.0,1.0
+qwen3-8b-think,mmlu,my professor,my rock,95,11,4,0.11846923828125,1.0
+r1-distill-qwen-7b,mmlu,my best friend,my professor,89,2,12,0.012939453125,0.4658203125
+r1-distill-qwen-7b,mmlu,a Stanford professor,a fortune cookie,89,5,7,0.7744140625,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,a stranger on the bus,89,5,3,0.7265625,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,my best friend,89,5,1,0.21875,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,my dog,89,6,4,0.75390625,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,my horoscope,89,6,9,0.60723876953125,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,my mom,89,5,5,1.0,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,my professor,89,5,11,0.210113525390625,1.0
+r1-distill-qwen-7b,mmlu,a Stanford professor,my rock,89,6,5,1.0,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,a stranger on the bus,89,8,4,0.3876953125,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,my best friend,89,7,1,0.0703125,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,my dog,89,6,2,0.2890625,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,my horoscope,89,5,6,1.0,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,my mom,89,6,4,0.75390625,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,my professor,89,5,9,0.4239501953125,1.0
+r1-distill-qwen-7b,mmlu,a fortune cookie,my rock,89,6,3,0.5078125,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,my best friend,89,4,2,0.6875,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,my dog,89,4,4,1.0,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,my horoscope,89,3,8,0.2265625,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,my mom,89,3,5,0.7265625,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,my professor,89,3,11,0.057373046875,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,my rock,89,3,4,1.0,1.0
+r1-distill-qwen-7b,mmlu,my best friend,my dog,89,2,4,0.6875,1.0
+r1-distill-qwen-7b,mmlu,my best friend,my horoscope,89,3,10,0.09228515625,1.0
+r1-distill-qwen-7b,mmlu,my best friend,my mom,89,2,6,0.2890625,1.0
+r1-distill-qwen-7b,mmlu,my best friend,my rock,89,3,6,0.5078125,1.0
+r1-distill-qwen-7b,mmlu,my dog,my horoscope,89,2,7,0.1796875,1.0
+r1-distill-qwen-7b,mmlu,my dog,my mom,89,3,5,0.7265625,1.0
+r1-distill-qwen-7b,mmlu,my dog,my professor,89,3,11,0.057373046875,1.0
+r1-distill-qwen-7b,mmlu,my dog,my rock,89,3,4,1.0,1.0
+r1-distill-qwen-7b,mmlu,my horoscope,my mom,89,7,4,0.548828125,1.0
+r1-distill-qwen-7b,mmlu,my horoscope,my professor,89,3,6,0.5078125,1.0
+r1-distill-qwen-7b,mmlu,my horoscope,my rock,89,7,3,0.34375,1.0
+r1-distill-qwen-7b,mmlu,my mom,my professor,89,2,8,0.109375,1.0
+r1-distill-qwen-7b,mmlu,my mom,my rock,89,5,4,1.0,1.0
+r1-distill-qwen-7b,mmlu,my professor,my rock,89,10,3,0.09228515625,1.0

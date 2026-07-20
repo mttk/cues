@@ -17,9 +17,6 @@ export HF_TOKEN=...        # optional, for gated models
 export OPENAI_API_KEY=...  # for judge.py
 ```
 
-`baber/logiqa2` requires `trust_remote_code=True` to load (handled
-internally in `qa_datasets.py`); no extra install step needed.
-
 ## Dataset registry (`qa_datasets.py`)
 
 `load_qa(dataset, subset, split, n, seed)` returns a list of
@@ -33,7 +30,7 @@ with a helpful message on an invalid `--dataset`/`--subset` combination.
 | `mmlu`     | `cais/mmlu`                                                                                                       | 4       | required (any MMLU config, e.g. `high_school_psychology`)          | `test` | unchanged from the original pipeline; `.select(range(n))` (head-of-file, not seeded-shuffled) to stay bit-for-bit comparable with existing results |
 | `mmlu_pro` | `TIGER-Lab/MMLU-Pro`                                                                                              | up to 10 | optional — filters on `category`; `None` = all categories         | `test` | items with <4 options are dropped and counted |
 | `medqa`    | `GBaker/MedQA-USMLE-4-options`                                                                                    | 4       | none (no subset concept — must be omitted)                        | `test` | `options` is a letter→text dict; sorted by letter before mapping `answer_idx` to an index |
-| `logiqa2`  | `baber/logiqa2` (`logiqa2` config)                                                                                | 4       | none                                                                | `test` | requires `trust_remote_code=True`; `question` = passage (`text`) + `"\n\n"` + question when a passage is present |
+| `logiqa2`  | `datatune/LogiQA2.0`                                                                                              | 4       | none                                                                | `test` | see "LogiQA 2.0 source" below — filters an undifferentiated dataset down to English MC only; `question` = passage (`text`) + `"\n\n"` + question when a passage is present |
 | `gsm_mc`   | `guipenedo/gsm8k-mc`                                                                                              | 4       | none                                                                | `test` | see "GSM-MC source" below — loads cleanly, no synthetic-distractor fallback needed |
 | `agieval`  | `hails/agieval-{lsat-ar,lsat-lr,lsat-rc,logiqa-en,sat-math}`                                                      | 4 or 5  | required, one of the 5 task names above; default `lsat-ar`         | `test` | English MC tasks only (no cloze tasks wired in); items with `len(gold) != 1` are dropped; embedded `"(A)"` / `"A."` choice prefixes are stripped (present in the raw exports) |
 
@@ -56,6 +53,25 @@ missing fields, a roughly balanced answer-letter distribution
 downloads, and its option columns are consistently formatted as strings).
 **The synthetic-distractor fallback described in the task spec was not
 implemented**, since it was only needed if no clean conversion existed.
+
+### LogiQA 2.0 source
+
+`datatune/LogiQA2.0` is not split by config the way `baber/logiqa2` is —
+every split (`train`/`validation`/`test`) is a single `text` column whose
+value is itself a JSON-encoded string, and the rows are an undifferentiated
+mix of three original LogiQA 2.0 configs: the English MC set we want
+(`{question, options, answer, text}`), its Chinese translation (identical
+shape, CJK content), and an NLI reformulation (`{premise, hypothesis,
+label}`, no `options`). `_load_logiqa2` parses the JSON wrapper (2 rows in
+the `test` split are malformed — two JSON objects concatenated into one
+string — and are skipped and counted); `_normalize_logiqa2` then drops NLI
+rows (no `options` field, caught by the existing missing-field check) and
+Chinese rows (detected via a CJK Unicode-range regex over
+`question + options + text`, not `str.isascii()` — the genuine English rows
+use Unicode symbols like circled-number enumerators `①②③④` and `°`, which
+`isascii()` would incorrectly flag as non-English). This recovers exactly
+1572 English MC test rows, matching the original LogiQA 2.0 English test
+set size.
 
 ### Example prompts (one per dataset, via `--dry-run`)
 
@@ -124,13 +140,13 @@ Which of the following factors is most likely defective in this patient?
 ```
 Answer the following multiple-choice question. Think step by step, then give your final answer on a new line in the format 'Answer: <letter>'.
 
-The incidence in Japan of most types of cancer is remarkably low compared to that in North America, especially considering that Japan has a modern life-style, industrial pollution included. The cancer rates, however, for Japanese people who immigrate to North America and adopt the diet of North Americans approximate the higher cancer rates prevalent in North America.
+Function is the inherent efficiency of things, it is determined by the structure of internal elements of things, and it is a kind of internal mechanism which is relatively stable and independent from the interior of things. Function is the external effect produced by the relationship between things and the external environment.
 
-If the statements above are true, they provide the most support for which one of the following?
-(A) The staple foods of the Japanese diet contain elements that cure cancer.
-(B) The stress of life in North America is greater than that of life in Japan and predisposes to cancer.
-(C) The higher cancer rates of Japanese immigrants to North America are caused by fats in the North American diet.
-(D) The relatively low rate of cancer among people in Japan does not result from a high frequency of a protective genetic trait among Japanese people.
+According to the above definition, which of the following statements is true?
+(A) The car has the function of transportation
+(B) The spleen has the functions of hematopoiesis, blood filtration, scavenging senile blood cells and so on
+(C) Law has the function of promoting the progress of scientific, technological and cultural undertakings
+(D) Mobile phone has the function of communication
 ```
 </details>
 
