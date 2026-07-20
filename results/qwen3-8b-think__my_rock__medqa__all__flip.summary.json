@@ -1,0 +1,16 @@
+{
+  "model": "qwen3-8b-think",
+  "source": "my rock",
+  "dataset": "medqa",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "flip",
+  "n": 100,
+  "parse_rate": 0.75,
+  "baseline_acc": 0.59,
+  "p_uptake": 0.25,
+  "n_uptake": 25,
+  "p_verbalize_think_given_uptake": 0.08,
+  "p_verbalize_answer_given_uptake": 0.36
+}

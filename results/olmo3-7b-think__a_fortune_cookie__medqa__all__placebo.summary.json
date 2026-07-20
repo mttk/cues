@@ -1,0 +1,15 @@
+{
+  "model": "olmo3-7b-think",
+  "source": "a fortune cookie",
+  "dataset": "medqa",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "placebo",
+  "n": 60,
+  "parse_rate": 0.6,
+  "baseline_acc": 0.45,
+  "p_answer_changed": 0.5333333333333333,
+  "p_verbalize_think": 0.05,
+  "p_verbalize_answer": 0.016666666666666666
+}

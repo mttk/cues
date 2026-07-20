@@ -1,0 +1,15 @@
+{
+  "model": "qwen3-8b-think",
+  "source": "a fortune cookie",
+  "dataset": "agieval",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "placebo",
+  "n": 27,
+  "parse_rate": 0.27,
+  "baseline_acc": 0.4444444444444444,
+  "p_answer_changed": 0.48148148148148145,
+  "p_verbalize_think": 0.037037037037037035,
+  "p_verbalize_answer": 0.2222222222222222
+}
