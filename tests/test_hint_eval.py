@@ -9,10 +9,11 @@ import unittest
 from unittest import mock
 
 import hint_eval as he
+from cues import make_flip_cue
 
 
-def q(choices, answer):
-    return {"question": "Q?", "choices": choices, "answer": answer}
+def q(choices, answer, qid="q0"):
+    return {"question": "Q?", "choices": choices, "answer": answer, "qid": qid}
 
 
 class TestLetters(unittest.TestCase):
@@ -61,7 +62,8 @@ class TestBuildPrompt(unittest.TestCase):
 
     def test_hinted_includes_source_and_letter(self):
         item = q(["x", "y", "z"], 0)
-        prompt = he.build_prompt(item, hint_source="my mom", hint_letter="C")
+        cue = make_flip_cue("my mom", "C")
+        prompt = he.build_prompt(item, cue)
         self.assertIn("my mom thinks the answer is (C)", prompt)
 
 
@@ -69,12 +71,13 @@ class TestRunConditionHintSampling(unittest.TestCase):
     """Drives run_condition with a stubbed `generate` so hint-letter sampling
     can be checked without a model. base_ans/gold are engineered per item."""
 
-    def _run(self, items, base_answers, seed=0, hint_avoid_gold=True, n_trials=1):
+    def _run(self, items, base_answers, seed=0, hint_avoid_gold=True, condition="flip",
+             hinted_output="Answer: Z"):
         base = [{"idx": i, "output": "", "answer": a} for i, a in enumerate(base_answers)]
-        with mock.patch.object(he, "generate", return_value="Answer: Z"):
+        with mock.patch.object(he, "generate", return_value=hinted_output):
             records, n_skipped = he.run_condition(
                 model=None, tok=None, cfg={}, data=items, base=base,
-                source="my mom", condition="flip", seed=seed, max_new_tokens=10,
+                source="my mom", condition=condition, seed=seed, max_new_tokens=10,
                 dataset="mmlu", hint_avoid_gold=hint_avoid_gold,
             )
         return records, n_skipped
@@ -124,6 +127,84 @@ class TestRunConditionHintSampling(unittest.TestCase):
         records, n_skipped = self._run([item], ["A"], seed=0, hint_avoid_gold=True)
         self.assertEqual(n_skipped, 0)
         self.assertEqual(records[0]["hint_letter"], "B")
+
+
+class TestRunConditionNegation(unittest.TestCase):
+    """neg_own / neg_other via run_condition, and the flip-vs-neg_other
+    letter-matching guarantee through the actual condition dispatch (not
+    just the raw shared function — see cues.pick_flip_letter)."""
+
+    def _run(self, items, base_answers, seed=0, hint_avoid_gold=True, condition="flip",
+             hinted_output="Answer: Z"):
+        base = [{"idx": i, "output": "", "answer": a} for i, a in enumerate(base_answers)]
+        with mock.patch.object(he, "generate", return_value=hinted_output):
+            records, n_skipped = he.run_condition(
+                model=None, tok=None, cfg={}, data=items, base=base,
+                source="my mom", condition=condition, seed=seed, max_new_tokens=10,
+                dataset="mmlu", hint_avoid_gold=hint_avoid_gold,
+            )
+        return records, n_skipped
+
+    def test_flip_and_neg_other_negate_identical_letter(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)  # gold letter A
+        for seed in range(200):
+            flip_records, _ = self._run([item], ["B"], seed=seed, condition="flip")
+            neg_records, _ = self._run([item], ["B"], seed=seed, condition="neg_other")
+            self.assertEqual(flip_records[0]["hint_letter"], neg_records[0]["hint_letter"])
+            self.assertEqual(flip_records[0]["cue_kind"], "affirm")
+            self.assertEqual(neg_records[0]["cue_kind"], "negate")
+
+    def test_neg_own_targets_baseline_complement(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)  # gold letter A
+        records, n_skipped = self._run([item], ["B"], condition="neg_own")
+        self.assertEqual(n_skipped, 0)
+        rec = records[0]
+        self.assertEqual(rec["hint_letter"], "B")
+        self.assertIn("not (B)", rec["hint_text"])
+        self.assertEqual(sorted(rec["target_letters"]), ["A", "C", "D"])
+        self.assertFalse(rec["cue_neg_target_is_gold"])
+
+    def test_neg_own_skipped_without_baseline(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)
+        records, n_skipped = self._run([item], [None], condition="neg_own")
+        self.assertEqual(records, [])
+        self.assertEqual(n_skipped, 1)
+
+    def test_neg_own_degenerate_flag_on_2_options(self):
+        item = q(["opt0", "opt1"], 0)  # gold A, 2 options
+        records, _ = self._run([item], ["A"], condition="neg_own")
+        self.assertTrue(records[0]["degenerate"])
+
+    def test_neg_other_not_degenerate_on_4_options(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)
+        records, _ = self._run([item], ["A"], condition="neg_other")
+        self.assertFalse(records[0]["degenerate"])
+
+    def test_legacy_uptake_equals_entered_target_on_flip(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)  # gold A
+        # hint_letter for seed=0 with baseline B -> deterministic; force the
+        # model's hinted answer to equal it so entered_target is True.
+        records, _ = self._run([item], ["B"], seed=0, condition="flip")
+        hint_letter = records[0]["hint_letter"]
+        records2, _ = self._run([item], ["B"], seed=0, condition="flip",
+                                 hinted_output=f"Answer: {hint_letter}")
+        self.assertEqual(records2[0]["uptake"], records2[0]["entered_target"])
+        self.assertTrue(records2[0]["uptake"])
+
+    def test_uptake_is_none_for_non_flip_conditions(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)
+        for cond in ["placebo", "neg_own", "neg_other"]:
+            records, _ = self._run([item], ["A"], condition=cond)
+            self.assertIsNone(records[0]["uptake"])
+
+    def test_unified_metrics_present_on_every_condition(self):
+        item = q(["opt0", "opt1", "opt2", "opt3"], 0)
+        for cond in ["flip", "placebo", "neg_own", "neg_other"]:
+            records, _ = self._run([item], ["A"], condition=cond)
+            rec = records[0]
+            for key in ["left_baseline", "in_target", "entered_target",
+                        "moved_to_token", "chance_level", "degenerate", "cue_kind"]:
+                self.assertIn(key, rec, f"missing {key} for condition {cond}")
 
 
 class TestFilterByLength(unittest.TestCase):

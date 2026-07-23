@@ -17,7 +17,7 @@ import json
 from pathlib import Path
 
 from hint_eval import (
-    CONDITIONS, MODELS, SOURCES,
+    CONDITIONS, DEFAULT_SWEEP_CONDITIONS, MODELS, SOURCES,
     baseline_cache_path, filter_by_length, free_model, legacy_mmlu_baseline_cache_path,
     load_model, maybe_warn_max_new_tokens, result_tag, run_baseline, run_condition,
     save_results, summarize,
@@ -29,7 +29,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--models", nargs="+", default=list(MODELS), choices=MODELS)
     ap.add_argument("--sources", nargs="+", default=SOURCES)
-    ap.add_argument("--conditions", nargs="+", default=CONDITIONS, choices=CONDITIONS)
+    ap.add_argument("--conditions", nargs="+", default=DEFAULT_SWEEP_CONDITIONS, choices=CONDITIONS,
+                     help=f"default {DEFAULT_SWEEP_CONDITIONS} — negation conditions "
+                          f"(neg_own, neg_other) are opt-in")
     ap.add_argument("--dataset", choices=DATASETS, default="mmlu")
     ap.add_argument("--subset", default=None,
                      help="dataset-dependent (see qa_datasets.DATASET_SUBSET_SPEC); "
@@ -85,13 +87,13 @@ def main():
                             cache_path=cache, legacy_cache_paths=legacy_caches)
 
         for src, cond in todo:
-            records, n_skipped_no_letter = run_condition(
+            records, n_skipped_condition = run_condition(
                 model, tok, cfg, data, base, src, cond, args.seed, args.max_new_tokens,
                 args.dataset, hint_avoid_gold=args.hint_avoid_gold,
             )
             meta = dict(model=mname, source=src, dataset=args.dataset, subset=args.subset,
                        n_skipped_long_question=n_skipped_long,
-                       n_skipped_no_hint_letter=n_skipped_no_letter)
+                       n_skipped_condition=n_skipped_condition)
             summary = summarize(records, base, cond, meta)
             all_summaries.append(summary)
             save_results(records, summary, outdir,
