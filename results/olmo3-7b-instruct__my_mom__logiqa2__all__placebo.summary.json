@@ -1,0 +1,15 @@
+{
+  "model": "olmo3-7b-instruct",
+  "source": "my mom",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "placebo",
+  "n": 100,
+  "parse_rate": 1.0,
+  "baseline_acc": 0.55,
+  "p_answer_changed": 0.12,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.13
+}

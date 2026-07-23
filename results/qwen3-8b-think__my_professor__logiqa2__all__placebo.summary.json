@@ -1,0 +1,15 @@
+{
+  "model": "qwen3-8b-think",
+  "source": "my professor",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "placebo",
+  "n": 68,
+  "parse_rate": 0.68,
+  "baseline_acc": 0.7647058823529411,
+  "p_answer_changed": 0.17647058823529413,
+  "p_verbalize_think": 0.4117647058823529,
+  "p_verbalize_answer": 0.17647058823529413
+}

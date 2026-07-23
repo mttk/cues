@@ -1,0 +1,15 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "my horoscope",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_no_hint_letter": 0,
+  "condition": "placebo",
+  "n": 99,
+  "parse_rate": 0.99,
+  "baseline_acc": 0.6868686868686869,
+  "p_answer_changed": 0.25252525252525254,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.010101010101010102
+}
