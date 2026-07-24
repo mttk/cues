@@ -385,10 +385,33 @@ def main(dataset_filter=None):
         sanity["uptake_mismatches"] = mism.to_dict("records")
 
     # ---- sanity: per-(model,dataset) baseline consistency across cells,
-    # across ALL conditions (the baseline pass is shared) ----
+    # across ALL conditions (the baseline pass is shared). Two independent
+    # detectors, since neither alone is complete:
+    #   (a) baseline_answer literally disagrees across conditions for the
+    #       same idx — catches any era mismatch, including in legacy data
+    #       that predates the run_id stamp below;
+    #   (b) baseline_run_id differs — catches a baseline regenerated under
+    #       different generation params (e.g. --max-new-tokens) even when
+    #       the answer happens to coincide; only available for records
+    #       written after hint_eval.py started stamping it (see
+    #       hint_eval.run_baseline). This is exactly what happened for a
+    #       real 79-idx mismatch across olmo3-7b-think/qwen3-8b-think on
+    #       medqa/logiqa2/agieval: their pre-existing 1536-token baseline
+    #       caches got regenerated at 4096 for the new neg_own/neg_other
+    #       sweep, but the already-on-disk flip/placebo files (computed
+    #       against the old baseline) were never rewritten.
+    # The resulting idx sets are excluded from every PAIRED statistic below
+    # (McNemar, clustered logit) — a marginal per-condition rate is still a
+    # valid summary of its own run, but pairing across two conditions
+    # computed against different baselines is not (see bad_idx_by_cell).
+    has_run_id = "baseline_run_id" in df.columns
+    bad_idx_by_cell = {}
     for (model, dataset), mdf in df.groupby(["model", "dataset"]):
         baseline_by_idx = mdf.groupby("idx")["baseline_answer"].agg(lambda s: s.nunique())
-        bad_idx = baseline_by_idx[baseline_by_idx > 1].index.tolist()
+        bad_idx = set(baseline_by_idx[baseline_by_idx > 1].index.tolist())
+        if has_run_id:
+            run_id_by_idx = mdf.groupby("idx")["baseline_run_id"].agg(lambda s: s.dropna().nunique())
+            bad_idx |= set(run_id_by_idx[run_id_by_idx > 1].index.tolist())
         if bad_idx:
             affected_cells = (
                 mdf[mdf["idx"].isin(bad_idx)][["model", "dataset", "source", "idx", "baseline_answer"]]
@@ -396,6 +419,27 @@ def main(dataset_filter=None):
                 .to_dict("records")
             )
             sanity["baseline_mismatch_cells"].extend(affected_cells)
+            bad_idx_by_cell[(model, dataset)] = bad_idx
+
+    baseline_era_exclusions = []
+    _logged_exclusion_cells = set()
+
+    def exclude_bad_idx(sub_df, model, dataset, section):
+        """Drop rows whose idx was flagged in bad_idx_by_cell for this
+        (model, dataset) before any paired computation. Returns the
+        filtered frame; records one exclusion-count entry per
+        (model, dataset, section) for the report (not per source/contrast,
+        to avoid repeating the same count many times over)."""
+        bad = bad_idx_by_cell.get((model, dataset))
+        if not bad:
+            return sub_df
+        key = (model, dataset, section)
+        if key not in _logged_exclusion_cells:
+            _logged_exclusion_cells.add(key)
+            baseline_era_exclusions.append({
+                "model": model, "dataset": dataset, "section": section, "n_idx_excluded": len(bad),
+            })
+        return sub_df[~sub_df["idx"].isin(bad)]
 
     models = sorted(df["model"].unique())
     sources = sorted(df["source"].unique())
@@ -573,6 +617,7 @@ def main(dataset_filter=None):
     pairwise_rows = []
     for model, dataset in model_dataset_pairs:
         mdf = flip_df[(flip_df["model"] == model) & (flip_df["dataset"] == dataset)]
+        mdf = exclude_bad_idx(mdf, model, dataset, "legacy pairwise (source vs source, flip)")
         cell_sources = sorted(mdf["source"].unique())
         wide_up = mdf.pivot_table(index="idx", columns="source", values="entered_target", aggfunc="first")
         pair_list = [
@@ -607,6 +652,7 @@ def main(dataset_filter=None):
     if HAS_STATSMODELS:
         for model, dataset in model_dataset_pairs:
             mdf = flip_df[(flip_df["model"] == model) & (flip_df["dataset"] == dataset)].copy()
+            mdf = exclude_bad_idx(mdf, model, dataset, "clustered logit (flip)")
             if mdf["source"].nunique() < 2:
                 continue
             ref = REFERENCE_SOURCE if REFERENCE_SOURCE in mdf["source"].unique() else sorted(mdf["source"].unique())[0]
@@ -649,6 +695,8 @@ def main(dataset_filter=None):
                       & (df.condition == cond_a) & (~df.degenerate)]
             sub_b = df[(df.model == model) & (df.dataset == dataset) & (df.source == source)
                       & (df.condition == cond_b) & (~df.degenerate)]
+            sub_a = exclude_bad_idx(sub_a, model, dataset, f"condition-vs-condition ({cond_a}_vs_{cond_b})")
+            sub_b = exclude_bad_idx(sub_b, model, dataset, f"condition-vs-condition ({cond_a}_vs_{cond_b})")
             if sub_a.empty or sub_b.empty:
                 continue
             res = paired_contrast(sub_a, sub_b, metric)
@@ -783,6 +831,15 @@ def main(dataset_filter=None):
     if sanity["baseline_mismatch_cells"]:
         lines.append("  - Affected (model, dataset, source, idx, baseline_answer) rows: "
                       f"{sanity['baseline_mismatch_cells'][:10]}{' ...' if len(sanity['baseline_mismatch_cells']) > 10 else ''}")
+        lines.append("  - **These idx are almost certainly a baseline-era mismatch, not model noise**: the "
+                     "baseline cache for that (model, dataset) was regenerated (e.g. a different "
+                     "`--max-new-tokens`) between an earlier sweep and a later one, so some already-on-disk "
+                     "condition files reference the old baseline answers and others reference the new ones "
+                     "for the same idx. They are excluded from every PAIRED statistic below (McNemar, "
+                     "clustered logit) — see 'Baseline-era exclusions' — since pairing across two different "
+                     "baselines for the same idx is not a valid contrast. Marginal per-condition rates "
+                     "(the per-cell table above) are unaffected: each is still computed against its own "
+                     "run's baseline.")
     lines.append(f"- Recomputed-vs-stored `uptake` mismatches on flip (should be 0): {len(sanity['uptake_mismatches'])}")
     if sanity["uptake_mismatches"]:
         lines.append(f"  - Examples: {sanity['uptake_mismatches'][:10]}")
@@ -799,6 +856,15 @@ def main(dataset_filter=None):
                  f"pre-cue-abstraction records that predate it fall back to {N_OPTIONS_CONTEXT_DEFAULT} (A-D).")
     lines.append(f"- Pre-cue-abstraction flip/placebo records (predating `cue_kind`/unified metrics) were "
                  f"backfilled — see `backfill_legacy_metrics` in this script for the exact formulas used.")
+
+    if baseline_era_exclusions:
+        lines.append("\n## Baseline-era exclusions\n")
+        lines.append("idx dropped from paired statistics because of the baseline-answer/baseline_run_id "
+                     "mismatch flagged above — one row per (model, dataset, section) actually computed "
+                     "(a section only appears if it was reached with at least one cell for that model, "
+                     "dataset):\n")
+        exclusions_df = pd.DataFrame(baseline_era_exclusions)
+        lines.append("```\n" + exclusions_df.to_string(index=False) + "\n```\n")
 
     lines.append("\n## Per-cell unified-metrics table\n")
     lines.append(f"Full long-format table: `{(out_dir / 'uptake_table.csv').relative_to(REPO_ROOT)}` — one row "
@@ -886,7 +952,10 @@ def main(dataset_filter=None):
     lines.append("\n## Condition-vs-condition matched contrasts (McNemar, Holm within each model,dataset,source cell)\n")
     lines.append(f"Full table: `{(out_dir / 'uptake_condition_pairwise.csv').relative_to(REPO_ROOT)}`. "
                  "Degenerate rows (2-option questions, where negation collapses into an affirmation of the "
-                 "complement) are excluded from both contrasts.\n")
+                 "complement) are excluded from both contrasts, and so is any idx flagged by the baseline-era "
+                 "sanity check above (see 'Baseline-era exclusions') — pairing a condition computed against "
+                 "baseline-A with one computed against baseline-B for the same idx is not a valid McNemar "
+                 "input.\n")
     if condition_pairwise_df.empty:
         lines.append("_No condition-vs-condition contrast could be computed — need both conditions present "
                      "for at least one (model, dataset, source) cell. Negation conditions are opt-in; run "

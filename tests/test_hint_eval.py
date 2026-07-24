@@ -5,7 +5,10 @@ monkeypatching hint_eval.generate) so the hint-sampling logic can be tested
 without a real model.
 """
 
+import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 import hint_eval as he
@@ -205,6 +208,77 @@ class TestRunConditionNegation(unittest.TestCase):
             for key in ["left_baseline", "in_target", "entered_target",
                         "moved_to_token", "chance_level", "degenerate", "cue_kind"]:
                 self.assertIn(key, rec, f"missing {key} for condition {cond}")
+
+
+class TestBaselineEraProtection(unittest.TestCase):
+    """run_baseline stamps max_new_tokens/run_id and refuses to silently
+    reuse a cache generated under a different token budget — this is the
+    fix for a real incident where a regenerated baseline (different
+    --max-new-tokens) left some already-on-disk condition files pointing at
+    the old baseline answers and new ones at the new answers, for the same
+    idx, corrupting paired stats downstream (see
+    analysis/uptake_analysis.py)."""
+
+    def setUp(self):
+        self.tmpdir = tempfile.TemporaryDirectory()
+        self.cache_path = Path(self.tmpdir.name) / "baseline.jsonl"
+        self.data = [q(["a", "b", "c", "d"], 0, qid=f"q{i}") for i in range(3)]
+
+    def tearDown(self):
+        self.tmpdir.cleanup()
+
+    def _run_baseline(self, max_new_tokens):
+        with mock.patch.object(he, "generate", return_value="Answer: A"):
+            return he.run_baseline(None, None, {}, self.data, max_new_tokens,
+                                   cache_path=self.cache_path)
+
+    def test_fresh_generation_stamps_max_new_tokens_and_run_id(self):
+        base = self._run_baseline(1536)
+        for b in base:
+            self.assertEqual(b["max_new_tokens"], 1536)
+            self.assertTrue(b["run_id"])
+        # all rows from the same generation batch share one run_id
+        self.assertEqual(len({b["run_id"] for b in base}), 1)
+
+    def test_matching_max_new_tokens_reuses_cache(self):
+        self._run_baseline(1536)
+        with mock.patch.object(he, "generate") as gen:
+            base = self._run_baseline(1536)
+        gen.assert_not_called()
+        self.assertEqual(base[0]["max_new_tokens"], 1536)
+
+    def test_mismatched_max_new_tokens_regenerates_instead_of_reusing(self):
+        first = self._run_baseline(1536)
+        first_run_id = first[0]["run_id"]
+        second = self._run_baseline(4096)
+        self.assertNotEqual(second[0]["run_id"], first_run_id)
+        self.assertEqual(second[0]["max_new_tokens"], 4096)
+        # the cache file on disk should now reflect the new generation
+        with self.cache_path.open() as f:
+            on_disk = [json.loads(l) for l in f]
+        self.assertEqual(on_disk[0]["max_new_tokens"], 4096)
+
+    def test_legacy_cache_without_stamp_is_still_reused(self):
+        # simulate a pre-fix cache: no max_new_tokens/run_id fields at all
+        with self.cache_path.open("w") as f:
+            for i in range(len(self.data)):
+                f.write(json.dumps({"idx": i, "output": "Answer: A", "answer": "A"}) + "\n")
+        with mock.patch.object(he, "generate") as gen:
+            base = self._run_baseline(4096)
+        gen.assert_not_called()
+        self.assertNotIn("max_new_tokens", base[0])
+
+    def test_run_condition_copies_baseline_provenance_onto_records(self):
+        base = self._run_baseline(1536)
+        with mock.patch.object(he, "generate", return_value="Answer: B"):
+            records, _ = he.run_condition(
+                model=None, tok=None, cfg={}, data=self.data, base=base,
+                source="my mom", condition="flip", seed=0, max_new_tokens=10,
+                dataset="mmlu",
+            )
+        for rec in records:
+            self.assertEqual(rec["baseline_max_new_tokens"], 1536)
+            self.assertEqual(rec["baseline_run_id"], base[0]["run_id"])
 
 
 class TestFilterByLength(unittest.TestCase):

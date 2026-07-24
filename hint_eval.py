@@ -44,6 +44,7 @@ import json
 import os
 import re
 import string
+import uuid
 from pathlib import Path
 
 import torch
@@ -210,20 +211,45 @@ def run_baseline(model, tok, cfg, data, max_new_tokens, cache_path=None, legacy_
     latter lets pre-existing MMLU baseline caches (old naming scheme, no
     dataset/seed in the filename) stay readable without being renamed.
     New/refreshed baselines are always written to `cache_path`.
+
+    Every freshly-generated baseline record is stamped with `max_new_tokens`
+    and a `run_id` (a fresh id per generation batch). On a cache hit, if the
+    cached `max_new_tokens` does not match what THIS call requested, the
+    cache is treated as a miss and regenerated instead of silently reused —
+    this is what a real incident was missing: a baseline cache for
+    (model, dataset, subset, n, seed) doesn't vary by max_new_tokens, so an
+    earlier 1536-token cache was silently reused for a later run requesting
+    4096, while already-on-disk condition files from the 1536 era kept
+    their old baseline_answer — producing a baseline-era mismatch for the
+    idx where the token budget actually changed the model's answer (see
+    analysis/uptake_analysis.py's baseline-era sanity check). Caches that
+    predate this stamp (no `max_new_tokens` key) are still trusted as-is,
+    since compatibility can't be checked either way for them.
     """
     read_candidates = [p for p in ([cache_path] if cache_path else []) + list(legacy_cache_paths or []) if p is not None]
     for candidate in read_candidates:
         candidate = Path(candidate)
-        if candidate.exists():
-            with open(candidate) as f:
-                base = [json.loads(l) for l in f]
-            if len(base) >= len(data):
-                print(f"[baseline] reusing cache {candidate}")
-                return base[: len(data)]
+        if not candidate.exists():
+            continue
+        with open(candidate) as f:
+            base = [json.loads(l) for l in f]
+        if len(base) < len(data):
+            continue
+        cached_mnt = base[0].get("max_new_tokens") if base else None
+        if cached_mnt is not None and cached_mnt != max_new_tokens:
+            print(f"[baseline] cache {candidate} was generated with max_new_tokens={cached_mnt}, "
+                 f"but {max_new_tokens} was requested for this run — ignoring and regenerating "
+                 f"(prevents mixing baseline eras across conditions).")
+            continue
+        note = f"max_new_tokens={cached_mnt}" if cached_mnt is not None else "legacy cache, no max_new_tokens stamp"
+        print(f"[baseline] reusing cache {candidate} ({note})")
+        return base[: len(data)]
+    run_id = uuid.uuid4().hex[:12]
     base = []
     for i, q in enumerate(tqdm(data, total=len(data), desc="baseline")):
         out = generate(model, tok, build_prompt(q), cfg, max_new_tokens)
-        base.append(dict(idx=i, output=out, answer=extract_answer(out, len(q["choices"]))))
+        base.append(dict(idx=i, output=out, answer=extract_answer(out, len(q["choices"])),
+                         max_new_tokens=max_new_tokens, run_id=run_id))
     if cache_path is not None:
         cache_path = Path(cache_path)
         cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -311,6 +337,8 @@ def run_condition(model, tok, cfg, data, base, source, condition, seed, max_new_
             gold=gold_letter,
             gold_index=q["answer"],
             baseline_answer=base_ans,
+            baseline_run_id=base[i].get("run_id"),
+            baseline_max_new_tokens=base[i].get("max_new_tokens"),
             hint_letter=hint_letter,
             hint_text=cue.text.strip(),
             hint_is_gold=hint_is_gold,

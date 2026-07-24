@@ -1,1 +1,159 @@
 model,dataset,source,contrast,label,metric,n_paired,b_only_a,b_only_b,p_value,p_holm
+olmo3-7b-instruct,agieval,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,98,11,27,0.013852965261321515,0.01808237098157406
+olmo3-7b-instruct,agieval,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,98,25,9,0.00904118549078703,0.01808237098157406
+olmo3-7b-instruct,mmlu,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,4,32,1.941574737429619e-06,3.883149474859238e-06
+olmo3-7b-instruct,mmlu,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,14,7,0.18924713134765625,0.18924713134765625
+olmo3-7b-instruct,logiqa2,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,1,41,1.9554136088117957e-11,3.9108272176235914e-11
+olmo3-7b-instruct,logiqa2,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,22,5,0.0015137195587158203,0.0015137195587158203
+olmo3-7b-instruct,medqa,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,4,35,3.353161446284503e-07,6.706322892569005e-07
+olmo3-7b-instruct,medqa,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,29,6,0.0001168418675661087,0.0001168418675661087
+olmo3-7b-instruct,mmlu,a fortune cookie,placebo_vs_neg_own,negation semantic effect,left_baseline,100,6,27,0.0003240634687244892,0.0006481269374489784
+olmo3-7b-instruct,mmlu,a fortune cookie,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,13,4,0.049041748046875,0.049041748046875
+olmo3-7b-instruct,logiqa2,a fortune cookie,placebo_vs_neg_own,negation semantic effect,left_baseline,100,8,22,0.016124801710247993,0.016124801710247993
+olmo3-7b-instruct,logiqa2,a fortune cookie,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,19,4,0.002599477767944336,0.005198955535888672
+olmo3-7b-instruct,medqa,a fortune cookie,placebo_vs_neg_own,negation semantic effect,left_baseline,100,5,20,0.004077315330505371,0.005153656005859375
+olmo3-7b-instruct,medqa,a fortune cookie,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,17,3,0.0025768280029296875,0.005153656005859375
+olmo3-7b-instruct,mmlu,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,100,8,16,0.15158963203430176,0.3031792640686035
+olmo3-7b-instruct,mmlu,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,1,3,0.625,0.625
+olmo3-7b-instruct,logiqa2,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,100,7,12,0.359283447265625,0.359283447265625
+olmo3-7b-instruct,logiqa2,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,14,2,0.004180908203125,0.00836181640625
+olmo3-7b-instruct,medqa,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,100,8,16,0.15158963203430176,0.15158963203430176
+olmo3-7b-instruct,medqa,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,16,2,0.001312255859375,0.00262451171875
+olmo3-7b-instruct,mmlu,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,100,1,27,2.1606683731079102e-07,4.3213367462158203e-07
+olmo3-7b-instruct,mmlu,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,4,8,0.3876953125,0.3876953125
+olmo3-7b-instruct,logiqa2,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,100,4,21,0.0009105205535888672,0.0018210411071777344
+olmo3-7b-instruct,logiqa2,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,8,11,0.6476058959960938,0.6476058959960938
+olmo3-7b-instruct,medqa,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,100,12,22,0.12144948495551944,0.12144948495551944
+olmo3-7b-instruct,medqa,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,12,3,0.03515625,0.0703125
+olmo3-7b-instruct,mmlu,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,100,2,19,0.00022125244140625,0.0004425048828125
+olmo3-7b-instruct,mmlu,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,6,4,0.75390625,0.75390625
+olmo3-7b-instruct,logiqa2,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,100,5,16,0.02660369873046875,0.0532073974609375
+olmo3-7b-instruct,logiqa2,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,14,4,0.0308837890625,0.0532073974609375
+olmo3-7b-instruct,medqa,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,100,9,21,0.04277394525706768,0.04277394525706768
+olmo3-7b-instruct,medqa,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,12,2,0.012939453125,0.02587890625
+olmo3-7b-instruct,mmlu,my horoscope,placebo_vs_neg_own,negation semantic effect,left_baseline,100,0,27,1.4901161193847656e-08,2.9802322387695312e-08
+olmo3-7b-instruct,mmlu,my horoscope,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,5,8,0.5810546875,0.5810546875
+olmo3-7b-instruct,logiqa2,my horoscope,placebo_vs_neg_own,negation semantic effect,left_baseline,100,3,25,2.744048833847046e-05,5.488097667694092e-05
+olmo3-7b-instruct,logiqa2,my horoscope,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,24,4,0.00017999112606048584,0.00017999112606048584
+olmo3-7b-instruct,medqa,my horoscope,placebo_vs_neg_own,negation semantic effect,left_baseline,100,1,24,1.5497207641601562e-06,3.0994415283203125e-06
+olmo3-7b-instruct,medqa,my horoscope,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,16,3,0.004425048828125,0.004425048828125
+olmo3-7b-instruct,mmlu,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,100,4,37,1.0258372640237212e-07,2.0516745280474424e-07
+olmo3-7b-instruct,mmlu,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,5,5,1.0,1.0
+olmo3-7b-instruct,logiqa2,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,100,2,26,3.032386302947998e-06,6.064772605895996e-06
+olmo3-7b-instruct,logiqa2,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,19,6,0.01463329792022705,0.01463329792022705
+olmo3-7b-instruct,medqa,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,100,5,27,0.00011307420209050179,0.00022614840418100357
+olmo3-7b-instruct,medqa,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,8,3,0.2265625,0.2265625
+olmo3-7b-instruct,mmlu,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,0,26,2.9802322387695312e-08,5.960464477539063e-08
+olmo3-7b-instruct,mmlu,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,11,5,0.210113525390625,0.210113525390625
+olmo3-7b-instruct,logiqa2,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,8,38,9.24769992138863e-06,9.24769992138863e-06
+olmo3-7b-instruct,logiqa2,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,31,3,7.660128176212311e-07,1.5320256352424622e-06
+olmo3-7b-instruct,medqa,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,2,35,1.0244548320770264e-08,2.0489096641540527e-08
+olmo3-7b-instruct,medqa,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,28,5,6.618769839406013e-05,6.618769839406013e-05
+olmo3-7b-instruct,mmlu,my rock,placebo_vs_neg_own,negation semantic effect,left_baseline,100,1,30,2.9802322387695312e-08,5.960464477539063e-08
+olmo3-7b-instruct,mmlu,my rock,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,3,2,1.0,1.0
+olmo3-7b-instruct,logiqa2,my rock,placebo_vs_neg_own,negation semantic effect,left_baseline,100,7,18,0.043285250663757324,0.06937932968139648
+olmo3-7b-instruct,logiqa2,my rock,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,17,6,0.03468966484069824,0.06937932968139648
+olmo3-7b-instruct,medqa,my rock,placebo_vs_neg_own,negation semantic effect,left_baseline,100,7,22,0.008130058646202087,0.016260117292404175
+olmo3-7b-instruct,medqa,my rock,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,16,4,0.01181793212890625,0.016260117292404175
+olmo3-7b-think,mmlu,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,89,6,19,0.01463329792022705,0.01463329792022705
+olmo3-7b-think,mmlu,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,16,3,0.004425048828125,0.00885009765625
+olmo3-7b-think,logiqa2,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,48,12,12,1.0,1.0
+olmo3-7b-think,logiqa2,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,48,5,5,1.0,1.0
+olmo3-7b-think,medqa,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,29,4,6,0.75390625,0.75390625
+olmo3-7b-think,medqa,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,29,5,1,0.21875,0.4375
+olmo3-7b-think,mmlu,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,89,4,6,0.75390625,1.0
+olmo3-7b-think,mmlu,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,5,8,0.5810546875,1.0
+olmo3-7b-think,mmlu,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,89,7,11,0.480682373046875,0.96136474609375
+olmo3-7b-think,mmlu,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,5,3,0.7265625,0.96136474609375
+olmo3-7b-think,mmlu,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,89,5,7,0.7744140625,0.7744140625
+olmo3-7b-think,mmlu,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,89,6,13,0.1670684814453125,0.334136962890625
+olmo3-7b-think,mmlu,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,8,6,0.79052734375,0.79052734375
+olmo3-7b-think,logiqa2,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,48,7,8,1.0,1.0
+olmo3-7b-think,medqa,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,29,6,2,0.2890625,0.2890625
+olmo3-7b-think,mmlu,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,89,2,21,6.604194641113281e-05,0.00013208389282226562
+olmo3-7b-think,mmlu,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,14,1,0.0009765625,0.0009765625
+olmo3-7b-think,logiqa2,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,48,9,11,0.8238029479980469,0.847900390625
+olmo3-7b-think,logiqa2,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,48,9,5,0.4239501953125,0.847900390625
+olmo3-7b-think,medqa,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,29,3,6,0.5078125,0.578125
+olmo3-7b-think,medqa,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,29,6,2,0.2890625,0.578125
+qwen3-8b-nothink,agieval,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,86,12,22,0.12144948495551944,0.12144948495551944
+qwen3-8b-nothink,agieval,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,86,20,6,0.009355306625366211,0.018710613250732422
+qwen3-8b-nothink,mmlu,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,14,16,0.855535551905632,0.855535551905632
+qwen3-8b-nothink,mmlu,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,6,1,0.125,0.25
+qwen3-8b-nothink,logiqa2,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,99,9,12,0.6636238098144531,0.6636238098144531
+qwen3-8b-nothink,logiqa2,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,99,14,7,0.18924713134765625,0.3784942626953125
+qwen3-8b-nothink,medqa,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,7,18,0.043285250663757324,0.08657050132751465
+qwen3-8b-nothink,medqa,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,9,5,0.4239501953125,0.4239501953125
+qwen3-8b-nothink,mmlu,a fortune cookie,placebo_vs_neg_own,negation semantic effect,left_baseline,100,11,18,0.26493089646101,0.52986179292202
+qwen3-8b-nothink,mmlu,a fortune cookie,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,2,2,1.0,1.0
+qwen3-8b-nothink,mmlu,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,100,4,15,0.0192108154296875,0.038421630859375
+qwen3-8b-nothink,mmlu,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,2,5,0.453125,0.453125
+qwen3-8b-nothink,logiqa2,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,99,7,18,0.043285250663757324,0.08657050132751465
+qwen3-8b-nothink,logiqa2,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,99,9,5,0.4239501953125,0.4239501953125
+qwen3-8b-nothink,medqa,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,100,13,11,0.8388197422027588,0.8388197422027588
+qwen3-8b-nothink,medqa,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,11,5,0.210113525390625,0.42022705078125
+qwen3-8b-nothink,mmlu,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,100,9,13,0.5234670639038086,1.0
+qwen3-8b-nothink,mmlu,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,4,2,0.6875,1.0
+qwen3-8b-nothink,logiqa2,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,99,10,20,0.09873714670538902,0.19747429341077805
+qwen3-8b-nothink,logiqa2,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,99,6,4,0.75390625,0.75390625
+qwen3-8b-nothink,medqa,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,100,6,17,0.03468966484069824,0.03468966484069824
+qwen3-8b-nothink,medqa,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,12,2,0.012939453125,0.02587890625
+qwen3-8b-nothink,mmlu,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,100,9,12,0.6636238098144531,1.0
+qwen3-8b-nothink,mmlu,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,4,3,1.0,1.0
+qwen3-8b-nothink,logiqa2,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,99,14,15,1.0,1.0
+qwen3-8b-nothink,logiqa2,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,99,7,6,1.0,1.0
+qwen3-8b-nothink,medqa,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,100,4,16,0.01181793212890625,0.01181793212890625
+qwen3-8b-nothink,mmlu,my horoscope,placebo_vs_neg_own,negation semantic effect,left_baseline,100,10,22,0.050102459732443094,0.10020491946488619
+qwen3-8b-nothink,mmlu,my horoscope,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,2,4,0.6875,0.6875
+qwen3-8b-nothink,mmlu,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,100,12,9,0.6636238098144531,1.0
+qwen3-8b-nothink,mmlu,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,3,1,0.625,1.0
+qwen3-8b-nothink,logiqa2,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,99,9,21,0.04277394525706768,0.08554789051413536
+qwen3-8b-nothink,logiqa2,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,99,7,6,1.0,1.0
+qwen3-8b-nothink,medqa,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,100,8,10,0.8145294189453125,0.8145294189453125
+qwen3-8b-nothink,medqa,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,13,2,0.00738525390625,0.0147705078125
+qwen3-8b-nothink,agieval,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,86,8,27,0.001878225477412343,0.001878225477412343
+qwen3-8b-nothink,agieval,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,86,24,3,4.9233436584472656e-05,9.846687316894531e-05
+qwen3-8b-nothink,mmlu,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,11,13,0.8388197422027588,0.8388197422027588
+qwen3-8b-nothink,mmlu,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,7,2,0.1796875,0.359375
+qwen3-8b-nothink,logiqa2,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,99,5,20,0.004077315330505371,0.008154630661010742
+qwen3-8b-nothink,logiqa2,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,99,10,5,0.3017578125,0.3017578125
+qwen3-8b-nothink,medqa,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,100,5,21,0.002493917942047119,0.004987835884094238
+qwen3-8b-nothink,medqa,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,17,3,0.0025768280029296875,0.004987835884094238
+qwen3-8b-nothink,mmlu,my rock,placebo_vs_neg_own,negation semantic effect,left_baseline,100,10,9,1.0,1.0
+qwen3-8b-nothink,mmlu,my rock,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,100,5,3,0.7265625,1.0
+qwen3-8b-think,agieval,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,15,4,1,0.375,0.375
+qwen3-8b-think,mmlu,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,97,1,14,0.0009765625,0.0009765625
+qwen3-8b-think,mmlu,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,97,12,0,0.00048828125,0.0009765625
+qwen3-8b-think,logiqa2,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,55,1,5,0.21875,0.21875
+qwen3-8b-think,logiqa2,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,55,7,1,0.0703125,0.140625
+qwen3-8b-think,medqa,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,65,2,11,0.0224609375,0.0224609375
+qwen3-8b-think,medqa,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,65,25,0,5.960464477539063e-08,1.1920928955078125e-07
+qwen3-8b-think,mmlu,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,97,2,6,0.2890625,0.578125
+qwen3-8b-think,mmlu,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,97,2,2,1.0,1.0
+qwen3-8b-think,mmlu,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,97,1,4,0.375,0.4375
+qwen3-8b-think,mmlu,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,97,5,1,0.21875,0.4375
+qwen3-8b-think,mmlu,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,97,0,4,0.125,0.25
+qwen3-8b-think,mmlu,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,97,2,1,1.0,1.0
+qwen3-8b-think,mmlu,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,97,1,7,0.0703125,0.0703125
+qwen3-8b-think,mmlu,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,97,6,0,0.03125,0.0625
+qwen3-8b-think,mmlu,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,97,1,22,5.7220458984375e-06,1.1444091796875e-05
+qwen3-8b-think,mmlu,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,97,12,0,0.00048828125,0.00048828125
+qwen3-8b-think,logiqa2,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,55,3,9,0.14599609375,0.14599609375
+qwen3-8b-think,medqa,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,65,0,19,3.814697265625e-06,3.814697265625e-06
+qwen3-8b-think,mmlu,my rock,placebo_vs_neg_own,negation semantic effect,left_baseline,97,1,5,0.21875,0.21875
+r1-distill-qwen-7b,mmlu,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,89,4,23,0.000310748815536499,0.000621497631072998
+r1-distill-qwen-7b,mmlu,a Stanford professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,4,3,1.0,1.0
+r1-distill-qwen-7b,medqa,a Stanford professor,placebo_vs_neg_own,negation semantic effect,left_baseline,70,7,13,0.26317596435546875,0.26317596435546875
+r1-distill-qwen-7b,mmlu,a stranger on the bus,placebo_vs_neg_own,negation semantic effect,left_baseline,89,4,6,0.75390625,1.0
+r1-distill-qwen-7b,mmlu,a stranger on the bus,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,7,4,0.548828125,1.0
+r1-distill-qwen-7b,mmlu,my best friend,placebo_vs_neg_own,negation semantic effect,left_baseline,89,3,11,0.057373046875,0.11474609375
+r1-distill-qwen-7b,mmlu,my best friend,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,5,6,1.0,1.0
+r1-distill-qwen-7b,mmlu,my dog,placebo_vs_neg_own,negation semantic effect,left_baseline,89,2,11,0.0224609375,0.044921875
+r1-distill-qwen-7b,mmlu,my dog,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,3,6,0.5078125,0.5078125
+r1-distill-qwen-7b,mmlu,my horoscope,placebo_vs_neg_own,negation semantic effect,left_baseline,89,4,11,0.11846923828125,0.11846923828125
+r1-distill-qwen-7b,mmlu,my mom,placebo_vs_neg_own,negation semantic effect,left_baseline,89,5,10,0.3017578125,0.603515625
+r1-distill-qwen-7b,mmlu,my mom,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,5,3,0.7265625,0.7265625
+r1-distill-qwen-7b,mmlu,my professor,placebo_vs_neg_own,negation semantic effect,left_baseline,89,3,34,1.233129296451807e-07,2.466258592903614e-07
+r1-distill-qwen-7b,mmlu,my professor,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,17,3,0.0025768280029296875,0.0025768280029296875
+r1-distill-qwen-7b,mmlu,my rock,placebo_vs_neg_own,negation semantic effect,left_baseline,89,2,5,0.453125,0.453125
+r1-distill-qwen-7b,mmlu,my rock,flip_vs_neg_other,endorsement effect (letter-matched),moved_to_token,89,6,1,0.125,0.25

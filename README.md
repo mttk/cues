@@ -340,6 +340,24 @@ dataset **except mmlu**, which keeps its original tag shape
 on disk stay discoverable (and `sweep.py`'s resumability check keeps
 working) without being renamed.
 
+**Baseline-era protection.** The cache key above doesn't vary by
+`--max-new-tokens` — bumping the token budget for a model/dataset that
+already has a cached baseline used to silently reuse the old cache for
+some fields and not others, since already-on-disk flip/placebo files keep
+whatever `baseline_answer` they were generated with while newly-run
+conditions pick up the (implicitly regenerated) one. This actually happened
+once (79 idx, concentrated in the thinking models on medqa/logiqa2/agieval)
+and is what `analysis/uptake_analysis.py`'s baseline-mismatch sanity check
+now exists to catch and exclude from paired stats. Going forward, every
+baseline record is stamped with `max_new_tokens` and a `run_id`: a cache
+whose stamped `max_new_tokens` doesn't match what a run requests is treated
+as a miss and regenerated instead of silently reused, and every condition
+record carries `baseline_run_id`/`baseline_max_new_tokens` copied from the
+baseline entry it used, so a future era mismatch is directly detectable
+(not just inferred from disagreeing answers). Caches from before this
+stamp existed are still trusted as-is on read (compatibility can't be
+checked either way for them).
+
 ## Judge (OpenAI)
 
 ```
@@ -394,6 +412,18 @@ pre-cue-abstraction flip/placebo files that predate `cue_kind` (see
   (`P(moved_to_token | neg_other)` vs. the no-cue churn expectation
   `P(left_baseline | placebo) / (n_options - 1)`) and missing-cell/sanity
   reporting
+
+**Baseline-era sanity check.** If a (model, dataset)'s baseline cache was
+ever regenerated between two sweeps (see "Baseline-era protection" above —
+typically a `--max-new-tokens` change), some idx end up with a
+`baseline_answer` that disagrees across condition files for that same
+(model, dataset). These idx are reported under "Baseline-answer mismatches"
+in Sanity checks and automatically excluded from every PAIRED statistic
+(the legacy source-vs-source McNemar, the clustered logit, and the
+condition-vs-condition contrasts) — see the "Baseline-era exclusions"
+section of the report for exactly which idx were dropped from where.
+Marginal per-cell rates in the main table are unaffected, since each is
+only ever computed against its own record's baseline.
 
 ## Still-deliberate simplifications
 
