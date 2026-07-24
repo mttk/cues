@@ -1,0 +1,21 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "a stranger on the bus",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 0,
+  "condition": "neg_other",
+  "n": 100,
+  "parse_rate": 0.99,
+  "baseline_acc": 0.68,
+  "p_left_baseline": 0.35,
+  "p_in_target": 0.9,
+  "p_entered_target": 0.0,
+  "p_moved_to_token": 0.1,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.12,
+  "n_neg_target_is_gold": 0,
+  "p_moved_to_token_given_neg_target_is_gold": NaN
+}

@@ -1,0 +1,19 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "my best friend",
+  "dataset": "medqa",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 0,
+  "condition": "neg_own",
+  "n": 100,
+  "parse_rate": 1.0,
+  "baseline_acc": 0.65,
+  "p_left_baseline": 0.25,
+  "p_in_target": 0.22,
+  "p_entered_target": 0.22,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.31
+}

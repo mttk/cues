@@ -1,0 +1,19 @@
+{
+  "model": "qwen3-8b-think",
+  "source": "a Stanford professor",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 6,
+  "condition": "neg_own",
+  "n": 94,
+  "parse_rate": 0.94,
+  "baseline_acc": 0.7872340425531915,
+  "p_left_baseline": 0.24468085106382978,
+  "p_in_target": 0.22340425531914893,
+  "p_entered_target": 0.22340425531914893,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.5425531914893617,
+  "p_verbalize_answer": 0.22340425531914893
+}

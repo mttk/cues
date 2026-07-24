@@ -1,0 +1,21 @@
+{
+  "model": "olmo3-7b-think",
+  "source": "a Stanford professor",
+  "dataset": "agieval",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 0,
+  "condition": "flip",
+  "n": 100,
+  "parse_rate": 0.57,
+  "baseline_acc": 0.2,
+  "p_left_baseline": 0.54,
+  "p_in_target": 0.18,
+  "p_entered_target": 0.18,
+  "p_moved_to_token": 0.18,
+  "n_degenerate": 0,
+  "p_uptake": 0.18,
+  "n_uptake": 18,
+  "p_verbalize_think_given_uptake": 0.16666666666666666,
+  "p_verbalize_answer_given_uptake": 0.7222222222222222
+}

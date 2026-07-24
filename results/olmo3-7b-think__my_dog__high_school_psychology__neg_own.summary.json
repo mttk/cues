@@ -1,0 +1,19 @@
+{
+  "model": "olmo3-7b-think",
+  "source": "my dog",
+  "dataset": "mmlu",
+  "subset": "high_school_psychology",
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 11,
+  "condition": "neg_own",
+  "n": 89,
+  "parse_rate": 0.89,
+  "baseline_acc": 0.8426966292134831,
+  "p_left_baseline": 0.14606741573033707,
+  "p_in_target": 0.1348314606741573,
+  "p_entered_target": 0.1348314606741573,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.5393258426966292,
+  "p_verbalize_answer": 0.20224719101123595
+}

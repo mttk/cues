@@ -1,0 +1,19 @@
+{
+  "model": "olmo3-7b-think",
+  "source": "my mom",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 9,
+  "condition": "neg_own",
+  "n": 91,
+  "parse_rate": 0.91,
+  "baseline_acc": 0.5274725274725275,
+  "p_left_baseline": 0.37362637362637363,
+  "p_in_target": 0.3076923076923077,
+  "p_entered_target": 0.3076923076923077,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.42857142857142855,
+  "p_verbalize_answer": 0.27472527472527475
+}

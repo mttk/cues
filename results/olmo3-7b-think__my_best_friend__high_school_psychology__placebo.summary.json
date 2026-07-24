@@ -1,0 +1,20 @@
+{
+  "model": "olmo3-7b-think",
+  "source": "my best friend",
+  "dataset": "mmlu",
+  "subset": "high_school_psychology",
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 11,
+  "condition": "placebo",
+  "n": 89,
+  "parse_rate": 0.89,
+  "baseline_acc": 0.8426966292134831,
+  "p_left_baseline": 0.14606741573033707,
+  "p_in_target": 0.8539325842696629,
+  "p_entered_target": 0.0,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_answer_changed": 0.14606741573033707,
+  "p_verbalize_think": 0.7303370786516854,
+  "p_verbalize_answer": 0.1348314606741573
+}

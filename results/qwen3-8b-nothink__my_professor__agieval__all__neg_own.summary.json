@@ -1,0 +1,19 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "my professor",
+  "dataset": "agieval",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 14,
+  "condition": "neg_own",
+  "n": 86,
+  "parse_rate": 0.86,
+  "baseline_acc": 0.45348837209302323,
+  "p_left_baseline": 0.6046511627906976,
+  "p_in_target": 0.5813953488372093,
+  "p_entered_target": 0.5813953488372093,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.32558139534883723
+}

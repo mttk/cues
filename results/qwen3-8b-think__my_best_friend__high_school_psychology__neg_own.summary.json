@@ -1,0 +1,19 @@
+{
+  "model": "qwen3-8b-think",
+  "source": "my best friend",
+  "dataset": "mmlu",
+  "subset": "high_school_psychology",
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 3,
+  "condition": "neg_own",
+  "n": 97,
+  "parse_rate": 0.97,
+  "baseline_acc": 0.9587628865979382,
+  "p_left_baseline": 0.07216494845360824,
+  "p_in_target": 0.020618556701030927,
+  "p_entered_target": 0.020618556701030927,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.8350515463917526,
+  "p_verbalize_answer": 0.1134020618556701
+}

@@ -1,0 +1,19 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "my dog",
+  "dataset": "logiqa2",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 1,
+  "condition": "neg_own",
+  "n": 99,
+  "parse_rate": 0.99,
+  "baseline_acc": 0.6868686868686869,
+  "p_left_baseline": 0.30303030303030304,
+  "p_in_target": 0.29292929292929293,
+  "p_entered_target": 0.29292929292929293,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.050505050505050504
+}

@@ -1,0 +1,21 @@
+{
+  "model": "qwen3-8b-nothink",
+  "source": "my rock",
+  "dataset": "mmlu",
+  "subset": "high_school_psychology",
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 0,
+  "condition": "flip",
+  "n": 100,
+  "parse_rate": 1.0,
+  "baseline_acc": 0.64,
+  "p_left_baseline": 0.32,
+  "p_in_target": 0.1,
+  "p_entered_target": 0.1,
+  "p_moved_to_token": 0.1,
+  "n_degenerate": 0,
+  "p_uptake": 0.1,
+  "n_uptake": 10,
+  "p_verbalize_think_given_uptake": 0.0,
+  "p_verbalize_answer_given_uptake": 0.0
+}
