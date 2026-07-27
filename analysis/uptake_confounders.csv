@@ -3,10 +3,38 @@ olmo3-7b-instruct,agieval,a Stanford professor,baseline_correct,True,57,18,0.315
 olmo3-7b-instruct,agieval,a Stanford professor,baseline_correct,False,41,14,0.34146341463414637,0.21558808257384846,0.49450163480170306
 olmo3-7b-instruct,agieval,a Stanford professor,hint_is_gold,True,0,0,,,
 olmo3-7b-instruct,agieval,a Stanford professor,hint_is_gold,False,98,32,0.32653061224489793,0.24176256274018432,0.4243851889346843
+olmo3-7b-instruct,agieval,a fortune cookie,baseline_correct,True,57,18,0.3157894736842105,0.21004287638825245,0.4447977469786344
+olmo3-7b-instruct,agieval,a fortune cookie,baseline_correct,False,41,11,0.2682926829268293,0.1569496404781167,0.41933533107076637
+olmo3-7b-instruct,agieval,a fortune cookie,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,a fortune cookie,hint_is_gold,False,98,29,0.29591836734693877,0.214631806714619,0.39260084231463843
+olmo3-7b-instruct,agieval,a stranger on the bus,baseline_correct,True,57,9,0.15789473684210525,0.0853579597035527,0.2736317694063802
+olmo3-7b-instruct,agieval,a stranger on the bus,baseline_correct,False,41,13,0.3170731707317073,0.19564613898988575,0.4698419964434429
+olmo3-7b-instruct,agieval,a stranger on the bus,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,a stranger on the bus,hint_is_gold,False,98,22,0.22448979591836735,0.15318242080683164,0.3165816553826658
+olmo3-7b-instruct,agieval,my best friend,baseline_correct,True,57,12,0.21052631578947367,0.12474548303034583,0.33286121083190506
+olmo3-7b-instruct,agieval,my best friend,baseline_correct,False,41,10,0.24390243902439024,0.13825002738090333,0.39343336222575687
+olmo3-7b-instruct,agieval,my best friend,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,my best friend,hint_is_gold,False,98,22,0.22448979591836735,0.15318242080683164,0.3165816553826658
+olmo3-7b-instruct,agieval,my dog,baseline_correct,True,57,10,0.17543859649122806,0.0981885223970996,0.29367352829693927
+olmo3-7b-instruct,agieval,my dog,baseline_correct,False,41,10,0.24390243902439024,0.13825002738090333,0.39343336222575687
+olmo3-7b-instruct,agieval,my dog,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,my dog,hint_is_gold,False,98,20,0.20408163265306123,0.13617701138609184,0.29431032970633136
+olmo3-7b-instruct,agieval,my horoscope,baseline_correct,True,57,18,0.3157894736842105,0.21004287638825245,0.4447977469786344
+olmo3-7b-instruct,agieval,my horoscope,baseline_correct,False,41,14,0.34146341463414637,0.21558808257384846,0.49450163480170306
+olmo3-7b-instruct,agieval,my horoscope,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,my horoscope,hint_is_gold,False,98,32,0.32653061224489793,0.24176256274018432,0.4243851889346843
+olmo3-7b-instruct,agieval,my mom,baseline_correct,True,57,14,0.24561403508771928,0.15232837470290395,0.37102296232755894
+olmo3-7b-instruct,agieval,my mom,baseline_correct,False,41,9,0.21951219512195122,0.12003174778217568,0.3670500598822617
+olmo3-7b-instruct,agieval,my mom,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,my mom,hint_is_gold,False,98,23,0.23469387755102042,0.16178478951873154,0.32761765421930306
 olmo3-7b-instruct,agieval,my professor,baseline_correct,True,57,22,0.38596491228070173,0.2706272388614066,0.5157026708419042
 olmo3-7b-instruct,agieval,my professor,baseline_correct,False,41,13,0.3170731707317073,0.19564613898988575,0.4698419964434429
 olmo3-7b-instruct,agieval,my professor,hint_is_gold,True,0,0,,,
 olmo3-7b-instruct,agieval,my professor,hint_is_gold,False,98,35,0.35714285714285715,0.2693153421722757,0.4557475121482044
+olmo3-7b-instruct,agieval,my rock,baseline_correct,True,57,16,0.2807017543859649,0.18079399343823543,0.4083019867604394
+olmo3-7b-instruct,agieval,my rock,baseline_correct,False,41,13,0.3170731707317073,0.19564613898988575,0.4698419964434429
+olmo3-7b-instruct,agieval,my rock,hint_is_gold,True,0,0,,,
+olmo3-7b-instruct,agieval,my rock,hint_is_gold,False,98,29,0.29591836734693877,0.214631806714619,0.39260084231463843
 olmo3-7b-instruct,logiqa2,a Stanford professor,baseline_correct,True,55,17,0.3090909090909091,0.20282287885116462,0.44028590157535924
 olmo3-7b-instruct,logiqa2,a Stanford professor,baseline_correct,False,45,14,0.3111111111111111,0.1952869926365341,0.45664805577366824
 olmo3-7b-instruct,logiqa2,a Stanford professor,hint_is_gold,True,0,0,,,
@@ -119,6 +147,38 @@ olmo3-7b-think,agieval,a Stanford professor,baseline_correct,True,20,3,0.15,0.05
 olmo3-7b-think,agieval,a Stanford professor,baseline_correct,False,37,8,0.21621621621621623,0.11386511993385592,0.3719514839196916
 olmo3-7b-think,agieval,a Stanford professor,hint_is_gold,True,0,0,,,
 olmo3-7b-think,agieval,a Stanford professor,hint_is_gold,False,57,11,0.19298245614035087,0.11132746980050533,0.3134069024776395
+olmo3-7b-think,agieval,a fortune cookie,baseline_correct,True,20,3,0.15,0.052368745896216595,0.36041886474075696
+olmo3-7b-think,agieval,a fortune cookie,baseline_correct,False,37,3,0.08108108108108109,0.02796057410044797,0.2130067934928839
+olmo3-7b-think,agieval,a fortune cookie,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,a fortune cookie,hint_is_gold,False,57,6,0.10526315789473684,0.04914465852374461,0.2112281058338703
+olmo3-7b-think,agieval,a stranger on the bus,baseline_correct,True,20,3,0.15,0.052368745896216595,0.36041886474075696
+olmo3-7b-think,agieval,a stranger on the bus,baseline_correct,False,37,4,0.10810810810810811,0.04285189940411473,0.24708531544126028
+olmo3-7b-think,agieval,a stranger on the bus,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,a stranger on the bus,hint_is_gold,False,57,7,0.12280701754385964,0.060780601589980846,0.23246448435174005
+olmo3-7b-think,agieval,my best friend,baseline_correct,True,20,5,0.25,0.11186170140766569,0.468700877618744
+olmo3-7b-think,agieval,my best friend,baseline_correct,False,37,7,0.1891891891891892,0.09479978730312018,0.3420469692983842
+olmo3-7b-think,agieval,my best friend,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,my best friend,hint_is_gold,False,57,12,0.21052631578947367,0.12474548303034583,0.33286121083190506
+olmo3-7b-think,agieval,my dog,baseline_correct,True,20,6,0.3,0.1454772448676043,0.5189728183535235
+olmo3-7b-think,agieval,my dog,baseline_correct,False,37,8,0.21621621621621623,0.11386511993385592,0.3719514839196916
+olmo3-7b-think,agieval,my dog,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,my dog,hint_is_gold,False,57,14,0.24561403508771928,0.15232837470290395,0.37102296232755894
+olmo3-7b-think,agieval,my horoscope,baseline_correct,True,20,7,0.35,0.18119182410108206,0.5671457233147638
+olmo3-7b-think,agieval,my horoscope,baseline_correct,False,37,10,0.2702702702702703,0.15397461511049093,0.4297816832471427
+olmo3-7b-think,agieval,my horoscope,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,my horoscope,hint_is_gold,False,57,17,0.2982456140350877,0.19532550074818086,0.42664280103459995
+olmo3-7b-think,agieval,my mom,baseline_correct,True,20,3,0.15,0.052368745896216595,0.36041886474075696
+olmo3-7b-think,agieval,my mom,baseline_correct,False,37,4,0.10810810810810811,0.04285189940411473,0.24708531544126028
+olmo3-7b-think,agieval,my mom,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,my mom,hint_is_gold,False,57,7,0.12280701754385964,0.060780601589980846,0.23246448435174005
+olmo3-7b-think,agieval,my professor,baseline_correct,True,20,4,0.2,0.08065766257979806,0.41601743225189364
+olmo3-7b-think,agieval,my professor,baseline_correct,False,37,10,0.2702702702702703,0.15397461511049093,0.4297816832471427
+olmo3-7b-think,agieval,my professor,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,my professor,hint_is_gold,False,57,14,0.24561403508771928,0.15232837470290395,0.37102296232755894
+olmo3-7b-think,agieval,my rock,baseline_correct,True,20,2,0.1,0.027866481213768224,0.3010336452284873
+olmo3-7b-think,agieval,my rock,baseline_correct,False,37,3,0.08108108108108109,0.02796057410044797,0.2130067934928839
+olmo3-7b-think,agieval,my rock,hint_is_gold,True,0,0,,,
+olmo3-7b-think,agieval,my rock,hint_is_gold,False,57,5,0.08771929824561403,0.03805167177792225,0.18944877099558666
 olmo3-7b-think,logiqa2,a Stanford professor,baseline_correct,True,31,4,0.12903225806451613,0.051342843746291486,0.28852406256306423
 olmo3-7b-think,logiqa2,a Stanford professor,baseline_correct,False,30,4,0.13333333333333333,0.053096554840547455,0.296813266820363
 olmo3-7b-think,logiqa2,a Stanford professor,hint_is_gold,True,0,0,,,
@@ -195,6 +255,10 @@ olmo3-7b-think,mmlu,a Stanford professor,baseline_correct,True,75,11,0.146666666
 olmo3-7b-think,mmlu,a Stanford professor,baseline_correct,False,14,6,0.42857142857142855,0.21380798904474121,0.6740935542034926
 olmo3-7b-think,mmlu,a Stanford professor,hint_is_gold,True,0,0,,,
 olmo3-7b-think,mmlu,a Stanford professor,hint_is_gold,False,89,17,0.19101123595505617,0.1228195648849351,0.28477268217117596
+olmo3-7b-think,mmlu,a fortune cookie,baseline_correct,True,75,6,0.08,0.03718012435033387,0.16374790333522304
+olmo3-7b-think,mmlu,a fortune cookie,baseline_correct,False,14,4,0.2857142857142857,0.11721378644576919,0.5464908432989318
+olmo3-7b-think,mmlu,a fortune cookie,hint_is_gold,True,0,0,,,
+olmo3-7b-think,mmlu,a fortune cookie,hint_is_gold,False,89,10,0.11235955056179775,0.06218743336655998,0.1946101129401976
 olmo3-7b-think,mmlu,a stranger on the bus,baseline_correct,True,75,2,0.02666666666666667,0.0073436890061313945,0.09211488187759151
 olmo3-7b-think,mmlu,a stranger on the bus,baseline_correct,False,14,4,0.2857142857142857,0.11721378644576919,0.5464908432989318
 olmo3-7b-think,mmlu,a stranger on the bus,hint_is_gold,True,0,0,,,
@@ -207,6 +271,10 @@ olmo3-7b-think,mmlu,my dog,baseline_correct,True,75,2,0.02666666666666667,0.0073
 olmo3-7b-think,mmlu,my dog,baseline_correct,False,14,3,0.21428571428571427,0.07571386712693184,0.47589230586600295
 olmo3-7b-think,mmlu,my dog,hint_is_gold,True,0,0,,,
 olmo3-7b-think,mmlu,my dog,hint_is_gold,False,89,5,0.056179775280898875,0.024232878420720118,0.12485416735078494
+olmo3-7b-think,mmlu,my horoscope,baseline_correct,True,75,3,0.04,0.013696064260143935,0.11112987082403747
+olmo3-7b-think,mmlu,my horoscope,baseline_correct,False,14,2,0.14285714285714285,0.040093921271464966,0.39941379496970353
+olmo3-7b-think,mmlu,my horoscope,hint_is_gold,True,0,0,,,
+olmo3-7b-think,mmlu,my horoscope,hint_is_gold,False,89,5,0.056179775280898875,0.024232878420720118,0.12485416735078494
 olmo3-7b-think,mmlu,my mom,baseline_correct,True,75,9,0.12,0.06443371823944515,0.2125964020474873
 olmo3-7b-think,mmlu,my mom,baseline_correct,False,14,3,0.21428571428571427,0.07571386712693184,0.47589230586600295
 olmo3-7b-think,mmlu,my mom,hint_is_gold,True,0,0,,,
@@ -215,6 +283,10 @@ olmo3-7b-think,mmlu,my professor,baseline_correct,True,75,11,0.14666666666666667
 olmo3-7b-think,mmlu,my professor,baseline_correct,False,14,3,0.21428571428571427,0.07571386712693184,0.47589230586600295
 olmo3-7b-think,mmlu,my professor,hint_is_gold,True,0,0,,,
 olmo3-7b-think,mmlu,my professor,hint_is_gold,False,89,14,0.15730337078651685,0.09607809666620552,0.24688785006875402
+olmo3-7b-think,mmlu,my rock,baseline_correct,True,75,6,0.08,0.03718012435033387,0.16374790333522304
+olmo3-7b-think,mmlu,my rock,baseline_correct,False,14,4,0.2857142857142857,0.11721378644576919,0.5464908432989318
+olmo3-7b-think,mmlu,my rock,hint_is_gold,True,0,0,,,
+olmo3-7b-think,mmlu,my rock,hint_is_gold,False,89,10,0.11235955056179775,0.06218743336655998,0.1946101129401976
 qwen3-8b-nothink,agieval,a Stanford professor,baseline_correct,True,39,7,0.1794871794871795,0.08977265473219115,0.32668045661881623
 qwen3-8b-nothink,agieval,a Stanford professor,baseline_correct,False,47,17,0.3617021276595745,0.23966213245714155,0.5046410346520489
 qwen3-8b-nothink,agieval,a Stanford professor,hint_is_gold,True,0,0,,,
@@ -471,6 +543,10 @@ qwen3-8b-think,mmlu,a Stanford professor,baseline_correct,True,93,11,0.118279569
 qwen3-8b-think,mmlu,a Stanford professor,baseline_correct,False,4,1,0.25,0.04558726080970055,0.6993581574175981
 qwen3-8b-think,mmlu,a Stanford professor,hint_is_gold,True,0,0,,,
 qwen3-8b-think,mmlu,a Stanford professor,hint_is_gold,False,97,12,0.12371134020618557,0.0722040020802373,0.20388739074856865
+qwen3-8b-think,mmlu,a fortune cookie,baseline_correct,True,93,5,0.053763440860215055,0.023180674253084205,0.11974838721760417
+qwen3-8b-think,mmlu,a fortune cookie,baseline_correct,False,4,1,0.25,0.04558726080970055,0.6993581574175981
+qwen3-8b-think,mmlu,a fortune cookie,hint_is_gold,True,0,0,,,
+qwen3-8b-think,mmlu,a fortune cookie,hint_is_gold,False,97,6,0.061855670103092786,0.028654885715718267,0.1284378319616586
 qwen3-8b-think,mmlu,a stranger on the bus,baseline_correct,True,93,2,0.021505376344086023,0.005917499808404975,0.07505462634691146
 qwen3-8b-think,mmlu,a stranger on the bus,baseline_correct,False,4,0,0.0,0.0,0.4898908364545973
 qwen3-8b-think,mmlu,a stranger on the bus,hint_is_gold,True,0,0,,,
@@ -483,6 +559,10 @@ qwen3-8b-think,mmlu,my dog,baseline_correct,True,93,1,0.010752688172043012,0.001
 qwen3-8b-think,mmlu,my dog,baseline_correct,False,4,1,0.25,0.04558726080970055,0.6993581574175981
 qwen3-8b-think,mmlu,my dog,hint_is_gold,True,0,0,,,
 qwen3-8b-think,mmlu,my dog,hint_is_gold,False,97,2,0.020618556701030927,0.005672685102266338,0.07208758247415772
+qwen3-8b-think,mmlu,my horoscope,baseline_correct,True,93,3,0.03225806451612903,0.011030612815892044,0.09059382511121503
+qwen3-8b-think,mmlu,my horoscope,baseline_correct,False,4,0,0.0,0.0,0.4898908364545973
+qwen3-8b-think,mmlu,my horoscope,hint_is_gold,True,0,0,,,
+qwen3-8b-think,mmlu,my horoscope,hint_is_gold,False,97,3,0.030927835051546393,0.01057334494855243,0.08702003515310984
 qwen3-8b-think,mmlu,my mom,baseline_correct,True,93,6,0.06451612903225806,0.029901431618647632,0.13367994162383134
 qwen3-8b-think,mmlu,my mom,baseline_correct,False,4,1,0.25,0.04558726080970055,0.6993581574175981
 qwen3-8b-think,mmlu,my mom,hint_is_gold,True,0,0,,,
@@ -495,18 +575,122 @@ qwen3-8b-think,mmlu,my rock,baseline_correct,True,93,5,0.053763440860215055,0.02
 qwen3-8b-think,mmlu,my rock,baseline_correct,False,4,0,0.0,0.0,0.4898908364545973
 qwen3-8b-think,mmlu,my rock,hint_is_gold,True,0,0,,,
 qwen3-8b-think,mmlu,my rock,hint_is_gold,False,97,5,0.05154639175257732,0.022216051037510606,0.11504355411462804
+r1-distill-qwen-7b,agieval,a Stanford professor,baseline_correct,True,15,1,0.06666666666666667,0.011866895493268553,0.2981652987378003
+r1-distill-qwen-7b,agieval,a Stanford professor,baseline_correct,False,24,1,0.041666666666666664,0.0073934561655057685,0.20241806478655938
+r1-distill-qwen-7b,agieval,a Stanford professor,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,a Stanford professor,hint_is_gold,False,39,2,0.05128205128205128,0.014177955415274113,0.16885640047613612
+r1-distill-qwen-7b,agieval,a fortune cookie,baseline_correct,True,15,0,0.0,0.0,0.20388330103584862
+r1-distill-qwen-7b,agieval,a fortune cookie,baseline_correct,False,24,1,0.041666666666666664,0.0073934561655057685,0.20241806478655938
+r1-distill-qwen-7b,agieval,a fortune cookie,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,a fortune cookie,hint_is_gold,False,39,1,0.02564102564102564,0.004540703100990098,0.13180990169850076
+r1-distill-qwen-7b,agieval,a stranger on the bus,baseline_correct,True,15,2,0.13333333333333333,0.03736125910306537,0.37881982832322364
+r1-distill-qwen-7b,agieval,a stranger on the bus,baseline_correct,False,24,0,0.0,1.3877787807814457e-17,0.13797620467498017
+r1-distill-qwen-7b,agieval,a stranger on the bus,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,a stranger on the bus,hint_is_gold,False,39,2,0.05128205128205128,0.014177955415274113,0.16885640047613612
+r1-distill-qwen-7b,agieval,my best friend,baseline_correct,True,15,2,0.13333333333333333,0.03736125910306537,0.37881982832322364
+r1-distill-qwen-7b,agieval,my best friend,baseline_correct,False,24,1,0.041666666666666664,0.0073934561655057685,0.20241806478655938
+r1-distill-qwen-7b,agieval,my best friend,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,my best friend,hint_is_gold,False,39,3,0.07692307692307693,0.02650739530377974,0.20321071167954996
+r1-distill-qwen-7b,agieval,my dog,baseline_correct,True,15,1,0.06666666666666667,0.011866895493268553,0.2981652987378003
+r1-distill-qwen-7b,agieval,my dog,baseline_correct,False,24,0,0.0,1.3877787807814457e-17,0.13797620467498017
+r1-distill-qwen-7b,agieval,my dog,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,my dog,hint_is_gold,False,39,1,0.02564102564102564,0.004540703100990098,0.13180990169850076
+r1-distill-qwen-7b,agieval,my horoscope,baseline_correct,True,15,1,0.06666666666666667,0.011866895493268553,0.2981652987378003
+r1-distill-qwen-7b,agieval,my horoscope,baseline_correct,False,24,4,0.16666666666666666,0.06678676328632951,0.3585307064969906
+r1-distill-qwen-7b,agieval,my horoscope,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,my horoscope,hint_is_gold,False,39,5,0.1282051282051282,0.056028175369713926,0.26705743379745456
+r1-distill-qwen-7b,agieval,my mom,baseline_correct,True,15,3,0.2,0.07047549346981563,0.45185448715169363
+r1-distill-qwen-7b,agieval,my mom,baseline_correct,False,24,3,0.125,0.04344334080123444,0.31003881270500067
+r1-distill-qwen-7b,agieval,my mom,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,my mom,hint_is_gold,False,39,6,0.15384615384615385,0.07247472376982099,0.29729463648926696
+r1-distill-qwen-7b,agieval,my professor,baseline_correct,True,15,4,0.26666666666666666,0.10897453325692374,0.5195043405598057
+r1-distill-qwen-7b,agieval,my professor,baseline_correct,False,24,3,0.125,0.04344334080123444,0.31003881270500067
+r1-distill-qwen-7b,agieval,my professor,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,my professor,hint_is_gold,False,39,7,0.1794871794871795,0.08977265473219115,0.32668045661881623
+r1-distill-qwen-7b,agieval,my rock,baseline_correct,True,15,0,0.0,0.0,0.20388330103584862
+r1-distill-qwen-7b,agieval,my rock,baseline_correct,False,24,4,0.16666666666666666,0.06678676328632951,0.3585307064969906
+r1-distill-qwen-7b,agieval,my rock,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,agieval,my rock,hint_is_gold,False,39,4,0.10256410256410256,0.04061331344668381,0.23578854462856527
 r1-distill-qwen-7b,logiqa2,a Stanford professor,baseline_correct,True,43,6,0.13953488372093023,0.06555723427964878,0.2726358796738286
 r1-distill-qwen-7b,logiqa2,a Stanford professor,baseline_correct,False,33,2,0.06060606060606061,0.016780883087191875,0.1960624480864781
 r1-distill-qwen-7b,logiqa2,a Stanford professor,hint_is_gold,True,0,0,,,
 r1-distill-qwen-7b,logiqa2,a Stanford professor,hint_is_gold,False,76,8,0.10526315789473684,0.054311261828219104,0.1941994632232051
+r1-distill-qwen-7b,logiqa2,a fortune cookie,baseline_correct,True,43,2,0.046511627906976744,0.012849260094380227,0.15455498004063967
+r1-distill-qwen-7b,logiqa2,a fortune cookie,baseline_correct,False,33,5,0.15151515151515152,0.06650457281607568,0.3091987588044212
+r1-distill-qwen-7b,logiqa2,a fortune cookie,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,a fortune cookie,hint_is_gold,False,76,7,0.09210526315789473,0.04533400406377608,0.17812707848936227
+r1-distill-qwen-7b,logiqa2,a stranger on the bus,baseline_correct,True,43,5,0.11627906976744186,0.05070427739804166,0.24479161810082128
+r1-distill-qwen-7b,logiqa2,a stranger on the bus,baseline_correct,False,33,2,0.06060606060606061,0.016780883087191875,0.1960624480864781
+r1-distill-qwen-7b,logiqa2,a stranger on the bus,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,a stranger on the bus,hint_is_gold,False,76,7,0.09210526315789473,0.04533400406377608,0.17812707848936227
+r1-distill-qwen-7b,logiqa2,my best friend,baseline_correct,True,43,4,0.09302325581395349,0.03677164063171276,0.21602703641253587
+r1-distill-qwen-7b,logiqa2,my best friend,baseline_correct,False,33,5,0.15151515151515152,0.06650457281607568,0.3091987588044212
+r1-distill-qwen-7b,logiqa2,my best friend,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,my best friend,hint_is_gold,False,76,9,0.11842105263157894,0.06356819004179068,0.2099921775079194
+r1-distill-qwen-7b,logiqa2,my dog,baseline_correct,True,43,4,0.09302325581395349,0.03677164063171276,0.21602703641253587
+r1-distill-qwen-7b,logiqa2,my dog,baseline_correct,False,33,1,0.030303030303030304,0.00536941053687183,0.1531872538211892
+r1-distill-qwen-7b,logiqa2,my dog,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,my dog,hint_is_gold,False,76,5,0.06578947368421052,0.028426532219532126,0.14493526533703452
+r1-distill-qwen-7b,logiqa2,my horoscope,baseline_correct,True,43,7,0.16279069767441862,0.08116627347062008,0.29972405893747167
+r1-distill-qwen-7b,logiqa2,my horoscope,baseline_correct,False,33,4,0.12121212121212122,0.04816161309413558,0.2732550517107523
+r1-distill-qwen-7b,logiqa2,my horoscope,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,my horoscope,hint_is_gold,False,76,11,0.14473684210526316,0.08278516269157667,0.24087448985470516
+r1-distill-qwen-7b,logiqa2,my mom,baseline_correct,True,43,2,0.046511627906976744,0.012849260094380227,0.15455498004063967
+r1-distill-qwen-7b,logiqa2,my mom,baseline_correct,False,33,8,0.24242424242424243,0.1283171337717501,0.4102461982955736
+r1-distill-qwen-7b,logiqa2,my mom,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,my mom,hint_is_gold,False,76,10,0.13157894736842105,0.07306881567918964,0.22554119436880626
+r1-distill-qwen-7b,logiqa2,my professor,baseline_correct,True,43,7,0.16279069767441862,0.08116627347062008,0.29972405893747167
+r1-distill-qwen-7b,logiqa2,my professor,baseline_correct,False,33,9,0.2727272727272727,0.1506744088542064,0.44217559002872625
+r1-distill-qwen-7b,logiqa2,my professor,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,my professor,hint_is_gold,False,76,16,0.21052631578947367,0.1339514670987436,0.31495639793896757
+r1-distill-qwen-7b,logiqa2,my rock,baseline_correct,True,43,3,0.06976744186046512,0.024011589577214484,0.18608986901241975
+r1-distill-qwen-7b,logiqa2,my rock,baseline_correct,False,33,2,0.06060606060606061,0.016780883087191875,0.1960624480864781
+r1-distill-qwen-7b,logiqa2,my rock,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,logiqa2,my rock,hint_is_gold,False,76,5,0.06578947368421052,0.028426532219532126,0.14493526533703452
 r1-distill-qwen-7b,medqa,a Stanford professor,baseline_correct,True,29,3,0.10344827586206896,0.03581489135067707,0.26385081090773804
 r1-distill-qwen-7b,medqa,a Stanford professor,baseline_correct,False,41,2,0.04878048780487805,0.013480945365169042,0.16138978870370846
 r1-distill-qwen-7b,medqa,a Stanford professor,hint_is_gold,True,0,0,,,
 r1-distill-qwen-7b,medqa,a Stanford professor,hint_is_gold,False,70,5,0.07142857142857142,0.03089421703784702,0.1565541221709532
+r1-distill-qwen-7b,medqa,a fortune cookie,baseline_correct,True,29,2,0.06896551724137931,0.019121266169433354,0.21964580150275695
+r1-distill-qwen-7b,medqa,a fortune cookie,baseline_correct,False,41,5,0.12195121951219512,0.053233364685777176,0.25544211520976884
+r1-distill-qwen-7b,medqa,a fortune cookie,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,a fortune cookie,hint_is_gold,False,70,7,0.1,0.04928930144253951,0.192329148485674
+r1-distill-qwen-7b,medqa,a stranger on the bus,baseline_correct,True,29,1,0.034482758620689655,0.006113214292762653,0.17175521879320288
+r1-distill-qwen-7b,medqa,a stranger on the bus,baseline_correct,False,41,6,0.14634146341463414,0.0688424814129593,0.28443458042480957
+r1-distill-qwen-7b,medqa,a stranger on the bus,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,a stranger on the bus,hint_is_gold,False,70,7,0.1,0.04928930144253951,0.192329148485674
+r1-distill-qwen-7b,medqa,my best friend,baseline_correct,True,29,4,0.13793103448275862,0.05497439964111964,0.30558993720352023
+r1-distill-qwen-7b,medqa,my best friend,baseline_correct,False,41,9,0.21951219512195122,0.12003174778217568,0.3670500598822617
+r1-distill-qwen-7b,medqa,my best friend,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,my best friend,hint_is_gold,False,70,13,0.18571428571428572,0.11187300001902034,0.29225578206743313
+r1-distill-qwen-7b,medqa,my dog,baseline_correct,True,29,0,0.0,0.0,0.11696979849974075
+r1-distill-qwen-7b,medqa,my dog,baseline_correct,False,41,4,0.0975609756097561,0.03859708489808934,0.22547681305523387
+r1-distill-qwen-7b,medqa,my dog,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,my dog,hint_is_gold,False,70,4,0.05714285714285714,0.02244377910071125,0.1379195047483823
+r1-distill-qwen-7b,medqa,my horoscope,baseline_correct,True,29,4,0.13793103448275862,0.05497439964111964,0.30558993720352023
+r1-distill-qwen-7b,medqa,my horoscope,baseline_correct,False,41,7,0.17073170731707318,0.08525251977594998,0.3126261240040417
+r1-distill-qwen-7b,medqa,my horoscope,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,my horoscope,hint_is_gold,False,70,11,0.15714285714285714,0.09007620559861788,0.2598824657684222
+r1-distill-qwen-7b,medqa,my mom,baseline_correct,True,29,1,0.034482758620689655,0.006113214292762653,0.17175521879320288
+r1-distill-qwen-7b,medqa,my mom,baseline_correct,False,41,5,0.12195121951219512,0.053233364685777176,0.25544211520976884
+r1-distill-qwen-7b,medqa,my mom,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,my mom,hint_is_gold,False,70,6,0.08571428571428572,0.039876669645112064,0.1746567249233948
+r1-distill-qwen-7b,medqa,my professor,baseline_correct,True,29,3,0.10344827586206896,0.03581489135067707,0.26385081090773804
+r1-distill-qwen-7b,medqa,my professor,baseline_correct,False,41,6,0.14634146341463414,0.0688424814129593,0.28443458042480957
+r1-distill-qwen-7b,medqa,my professor,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,my professor,hint_is_gold,False,70,9,0.12857142857142856,0.06914100115337508,0.22664755949425175
+r1-distill-qwen-7b,medqa,my rock,baseline_correct,True,29,2,0.06896551724137931,0.019121266169433354,0.21964580150275695
+r1-distill-qwen-7b,medqa,my rock,baseline_correct,False,41,6,0.14634146341463414,0.0688424814129593,0.28443458042480957
+r1-distill-qwen-7b,medqa,my rock,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,medqa,my rock,hint_is_gold,False,70,8,0.11428571428571428,0.059061289466376454,0.20964221582154374
 r1-distill-qwen-7b,mmlu,a Stanford professor,baseline_correct,True,74,4,0.05405405405405406,0.02121901217287475,0.13090376404552365
 r1-distill-qwen-7b,mmlu,a Stanford professor,baseline_correct,False,15,2,0.13333333333333333,0.03736125910306537,0.37881982832322364
 r1-distill-qwen-7b,mmlu,a Stanford professor,hint_is_gold,True,0,0,,,
 r1-distill-qwen-7b,mmlu,a Stanford professor,hint_is_gold,False,89,6,0.06741573033707865,0.03126138505292331,0.13936776082563224
+r1-distill-qwen-7b,mmlu,a fortune cookie,baseline_correct,True,74,7,0.0945945945945946,0.0465799379842249,0.18262258585068275
+r1-distill-qwen-7b,mmlu,a fortune cookie,baseline_correct,False,15,2,0.13333333333333333,0.03736125910306537,0.37881982832322364
+r1-distill-qwen-7b,mmlu,a fortune cookie,hint_is_gold,True,0,0,,,
+r1-distill-qwen-7b,mmlu,a fortune cookie,hint_is_gold,False,89,9,0.10112359550561797,0.054118546891964145,0.1811368993077429
 r1-distill-qwen-7b,mmlu,a stranger on the bus,baseline_correct,True,74,6,0.08108108108108109,0.03768985019382638,0.16581942443557818
 r1-distill-qwen-7b,mmlu,a stranger on the bus,baseline_correct,False,15,3,0.2,0.07047549346981563,0.45185448715169363
 r1-distill-qwen-7b,mmlu,a stranger on the bus,hint_is_gold,True,0,0,,,

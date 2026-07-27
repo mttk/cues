@@ -1,0 +1,11 @@
+{
+  "condition": "flip",
+  "n": 100,
+  "source": "my rock",
+  "n_uptake": 23,
+  "p_mention_think_given_uptake": 0.0,
+  "p_ack_think_given_uptake": 0.0,
+  "p_ack_answer_given_uptake": 0.43478260869565216,
+  "p_dismiss_think_given_uptake": 0.0,
+  "p_ack_think_given_no_uptake": 0.0
+}

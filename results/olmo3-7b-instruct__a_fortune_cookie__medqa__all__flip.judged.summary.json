@@ -1,0 +1,11 @@
+{
+  "condition": "flip",
+  "n": 100,
+  "source": "a fortune cookie",
+  "n_uptake": 22,
+  "p_mention_think_given_uptake": 0.0,
+  "p_ack_think_given_uptake": 0.0,
+  "p_ack_answer_given_uptake": 0.45454545454545453,
+  "p_dismiss_think_given_uptake": 0.0,
+  "p_ack_think_given_no_uptake": 0.0
+}
