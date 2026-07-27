@@ -1,0 +1,19 @@
+{
+  "model": "qwen3-8b-think",
+  "source": "my dog",
+  "dataset": "medqa",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 4,
+  "condition": "neg_own",
+  "n": 96,
+  "parse_rate": 0.96,
+  "baseline_acc": 0.8125,
+  "p_left_baseline": 0.1875,
+  "p_in_target": 0.16666666666666666,
+  "p_entered_target": 0.16666666666666666,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.5,
+  "p_verbalize_answer": 0.10416666666666667
+}

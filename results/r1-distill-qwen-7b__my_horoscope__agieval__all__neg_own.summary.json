@@ -1,0 +1,19 @@
+{
+  "model": "r1-distill-qwen-7b",
+  "source": "my horoscope",
+  "dataset": "agieval",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 61,
+  "condition": "neg_own",
+  "n": 39,
+  "parse_rate": 0.39,
+  "baseline_acc": 0.38461538461538464,
+  "p_left_baseline": 0.717948717948718,
+  "p_in_target": 0.28205128205128205,
+  "p_entered_target": 0.28205128205128205,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.02564102564102564,
+  "p_verbalize_answer": 0.1282051282051282
+}

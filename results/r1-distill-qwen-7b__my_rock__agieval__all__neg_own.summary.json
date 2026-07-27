@@ -1,0 +1,19 @@
+{
+  "model": "r1-distill-qwen-7b",
+  "source": "my rock",
+  "dataset": "agieval",
+  "subset": null,
+  "n_skipped_long_question": 0,
+  "n_skipped_condition": 61,
+  "condition": "neg_own",
+  "n": 39,
+  "parse_rate": 0.39,
+  "baseline_acc": 0.38461538461538464,
+  "p_left_baseline": 0.6410256410256411,
+  "p_in_target": 0.23076923076923078,
+  "p_entered_target": 0.23076923076923078,
+  "p_moved_to_token": 0.0,
+  "n_degenerate": 0,
+  "p_verbalize_think": 0.0,
+  "p_verbalize_answer": 0.07692307692307693
+}
