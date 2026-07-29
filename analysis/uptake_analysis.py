@@ -3,12 +3,15 @@
 (flip, placebo, neg_own, neg_other — see cues.py), per model x dataset x
 source.
 
-Reads results/*.jsonl (all four conditions), recomputes the unified metrics
-from raw records (left_baseline, in_target, entered_target, moved_to_token,
-chance_level — see cues.py / hint_eval.run_condition), cross-checks against
-results/*.summary.json, and writes:
+Reads *.jsonl from --results-dir (default: results_flagged/, the output of
+analysis/backfill_parse_flags.py — falls back to results/ with a loud
+warning if that doesn't exist; see "Parse integrity" below), recomputes the
+unified metrics from raw records (left_baseline, in_target, entered_target,
+moved_to_token, chance_level — see cues.py / hint_eval.run_condition),
+cross-checks against the sibling *.summary.json files, and writes:
   - uptake_table.csv          long format: one row per (model, dataset,
                                source, condition), all unified metrics + CIs
+                               — CLEAN records only (see "Parse integrity")
   - uptake_table_wide.csv     P(left_baseline) pivoted condition-into-columns
                                per (model, dataset, source) — the "2x2" (as a
                                1x4 row per cell; see README)
@@ -18,27 +21,56 @@ results/*.summary.json, and writes:
                                paired McNemar, condition vs condition at fixed
                                source: placebo-vs-neg_own (on left_baseline)
                                and flip-vs-neg_other (on moved_to_token),
-                               letter-matched per idx
+                               letter-matched per idx; both sides restricted
+                               to clean idx (see "Parse integrity")
   - uptake_confounders.csv    flip's baseline_correct / hint_is_gold splits
   - uptake_neg_other_by_gold.csv
                                neg_other stratified by neg_target_is_gold
+  - uptake_contamination.csv  the "manufactured uptake" quantification: per
+                               (model, dataset, source, condition), p_clean,
+                               p_truncated, and the headline rate computed
+                               over ALL records vs over CLEAN records only
+  - uptake_parse_integrity.csv
+                               per (model, dataset): p_clean, p_fallback,
+                               p_think_unclosed, and whether it was
+                               quarantined (p_clean < 0.7 -> excluded from
+                               every other output above)
   - uptake_heatmap.png        one panel per condition present, shared color
                                scale, model[xdataset] rows x source columns
+                               (clean records only)
   - uptake_report.md          ~1-2 page written summary
+
+Parse integrity: answer extraction via the parenthesised-letter fallback on
+a TRUNCATED generation (hit the token cap before emitting "Answer: X")
+manufactures uptake — it grabs the last option mentioned in an unfinished
+chain-of-thought, which is biased toward the hinted option. `clean` (from
+backfill_parse_flags.py, or stamped directly by hint_eval.py going forward)
+marks a record where BOTH the baseline and hinted generations produced an
+explicit, non-truncated answer. Every headline table/statistic here is
+computed on clean records ONLY — see uptake_contamination.csv for the
+all-vs-clean comparison that quantifies how much this actually mattered per
+cell, and uptake_parse_integrity.csv / the report's "Parse integrity"
+section for which (model, dataset) pairs were QUARANTINED entirely (overall
+p_clean < 0.7 — excluded from every headline output, listed explicitly
+rather than silently dropped).
 
 Pre-cue-abstraction flip/placebo records (produced before this script's
 negation-conditions update) predate cue_kind/target_letters/token_letters
 and the unified metrics fields; they are backfilled on load (see
 backfill_legacy_metrics) using the same formulas those fields would have
 had under the old flip/placebo-only template rendering, so old and new
-result files combine into one consistent analysis.
+result files combine into one consistent analysis. Records that predate
+the parse-integrity fields entirely (no `clean` column anywhere in scope)
+are all treated as clean, with a loud warning, since there is nothing to
+filter on — this is the expected shape only when --results-dir points at a
+pre-backfill results/ directory.
 
 With no --dataset flag, this is an AGGREGATE analysis across every dataset
-present in results/ (grouped by (model, dataset, source) throughout, so a
-source name reused across datasets, e.g. "my mom" on both mmlu and medqa,
-is never silently pooled) and outputs land in analysis/. With --dataset X,
-the analysis is scoped to that one dataset and outputs land in
-analysis/X/ instead.
+present (grouped by (model, dataset, source) throughout, so a source name
+reused across datasets, e.g. "my mom" on both mmlu and medqa, is never
+silently pooled) and outputs land in analysis/. With --dataset X, the
+analysis is scoped to that one dataset and outputs land in analysis/X/
+instead.
 
 Re-run any time; every output is fully overwritten (no accumulation).
 Requires: pandas, numpy, matplotlib, tqdm. statsmodels is optional (used for
@@ -47,6 +79,7 @@ a per-(model,dataset) clustered logistic regression on flip if installed).
 Usage:
   python analysis/uptake_analysis.py                 # aggregate, all datasets
   python analysis/uptake_analysis.py --dataset mmlu   # scoped to one dataset
+  python analysis/uptake_analysis.py --results-dir results  # skip the flagged dir
 """
 
 import argparse
@@ -73,7 +106,9 @@ except ImportError:
     HAS_STATSMODELS = False
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-RESULTS_DIR = REPO_ROOT / "results"
+DEFAULT_RESULTS_DIR = REPO_ROOT / "results_flagged"
+FALLBACK_RESULTS_DIR = REPO_ROOT / "results"
+RESULTS_DIR = DEFAULT_RESULTS_DIR  # resolved per-run in main(); see resolve_results_dir
 OUT_DIR = REPO_ROOT / "analysis"
 
 ALL_CONDITIONS = ["flip", "placebo", "neg_own", "neg_other"]
@@ -85,6 +120,7 @@ N_OPTIONS_CONTEXT_DEFAULT = 4
 
 Z_95 = 1.959963984540054  # standard normal 97.5th percentile, for Wilson CI
 CHURN_FLAG_THRESHOLD = 0.05  # placebo p_left_baseline above this gets flagged
+CLEAN_QUARANTINE_THRESHOLD = 0.7  # (model,dataset) overall p_clean below this is quarantined
 REFERENCE_SOURCE = "a Stanford professor"  # most-authoritative source, used as
 # logistic-regression reference level and as the fixed comparator in the
 # (legacy, flip-only) source-vs-source pairwise significance testing.
@@ -173,6 +209,27 @@ def kendall_tau(x, y):
 # --------------------------------------------------------------------------
 # Loading
 # --------------------------------------------------------------------------
+
+def resolve_results_dir(results_dir_arg):
+    """--results-dir defaults to results_flagged/ (the output of
+    backfill_parse_flags.py); falls back to results/ with a loud warning if
+    that doesn't exist (or has no .jsonl files) — an explicit --results-dir
+    is used as-is (no fallback, no warning: the user asked for it)."""
+    if results_dir_arg is not None:
+        d = Path(results_dir_arg)
+        if not d.is_absolute():
+            d = REPO_ROOT / d
+        return d
+    if DEFAULT_RESULTS_DIR.is_dir() and any(DEFAULT_RESULTS_DIR.glob("*.jsonl")):
+        return DEFAULT_RESULTS_DIR
+    print(f"[warn] {DEFAULT_RESULTS_DIR.relative_to(REPO_ROOT)} not found (or empty) — falling back to "
+          f"{FALLBACK_RESULTS_DIR.relative_to(REPO_ROOT)}. Parse-integrity flags (clean/parse_method/"
+          f"think_unclosed) will be MISSING there unless hint_eval.py already stamped them at generation "
+          f"time; every record will be treated as clean with a loud warning if so. Run "
+          f"`python analysis/backfill_parse_flags.py` first for a properly flagged analysis.",
+          file=sys.stderr)
+    return FALLBACK_RESULTS_DIR
+
 
 def parse_model_from_filename(path):
     return path.name.split("__", 1)[0]
@@ -316,12 +373,16 @@ def backfill_legacy_metrics(df):
 # Main pipeline
 # --------------------------------------------------------------------------
 
-def main(dataset_filter=None):
+def main(dataset_filter=None, results_dir_arg=None):
+    global RESULTS_DIR
+    RESULTS_DIR = resolve_results_dir(results_dir_arg)
+
     sanity = {"multi_source_cells": [], "baseline_mismatch_cells": [], "uptake_mismatches": []}
 
     df = load_all_records(sanity)
     if df.empty:
-        print("No result files found under results/. Nothing to analyze.", file=sys.stderr)
+        print(f"No result files found under {RESULTS_DIR.relative_to(REPO_ROOT)}. Nothing to analyze.",
+              file=sys.stderr)
         sys.exit(1)
 
     all_datasets_seen = sorted(df["dataset"].dropna().unique())
@@ -371,6 +432,113 @@ def main(dataset_filter=None):
     )
     if "cue_neg_target_is_gold" not in df.columns:
         df["cue_neg_target_is_gold"] = np.nan
+
+    # ======================================================================
+    # Parse integrity: fill in clean/parse_method/think_unclosed gracefully
+    # (see backfill_parse_flags.py), compute the parse-integrity table and
+    # contamination panel from the FULL population, then restrict `df` to
+    # clean records in non-quarantined (model, dataset) cells for
+    # everything that follows — this is what makes every downstream
+    # headline number (including all paired stats) "clean-only" without
+    # touching the rest of the pipeline's logic.
+    # ======================================================================
+    has_parse_flags = "clean" in df.columns and df["clean"].notna().any()
+    if not has_parse_flags:
+        print(f"[warn] No parse-integrity flags (`clean`) found in any loaded record under "
+              f"{RESULTS_DIR.relative_to(REPO_ROOT)} — treating every record as clean. This is expected "
+              f"only when --results-dir points at a pre-backfill results/ directory; run "
+              f"`python analysis/backfill_parse_flags.py` for a properly flagged analysis.", file=sys.stderr)
+        df["clean"] = True
+        df["parse_method"] = "explicit"
+        df["base_parse_method"] = "explicit"
+        df["think_unclosed"] = False
+        df["base_think_unclosed"] = False
+    else:
+        n_missing_clean = int(df["clean"].isna().sum())
+        if n_missing_clean:
+            print(f"[warn] {n_missing_clean} record(s) in scope lack a `clean` parse-integrity flag "
+                  f"(mixed flagged/unflagged data) — treated as NOT clean, since their integrity can't "
+                  f"be verified.", file=sys.stderr)
+        df["clean"] = df["clean"].fillna(False).astype(bool)
+        for col in ["parse_method", "base_parse_method"]:
+            if col not in df.columns:
+                df[col] = "none"
+            else:
+                df[col] = df[col].fillna("none")
+        for col in ["think_unclosed", "base_think_unclosed"]:
+            if col not in df.columns:
+                df[col] = False
+            else:
+                df[col] = df[col].apply(lambda v: bool(v) if pd.notna(v) else False)
+
+    def hit_field_for_condition(condition):
+        """Pre-existing bool field standing in for 'the effect of interest'
+        — flip's legacy `uptake` name kept for continuity; every other
+        condition uses `answer_changed` (the left_baseline alias present on
+        every record regardless of era)."""
+        return "uptake" if condition == "flip" else "answer_changed"
+
+    # ---- Parse integrity, per (model, dataset): overall p_clean across
+    # every source/condition in scope; quarantine (exclude entirely from
+    # every headline output below) if it falls under the threshold ----
+    integrity_rows = []
+    quarantined_cells = set()
+    for (model, dataset), g in df.groupby(["model", "dataset"]):
+        n = len(g)
+        p_clean = g["clean"].mean()
+        p_fallback = ((g["parse_method"] == "fallback") | (g["base_parse_method"] == "fallback")).mean()
+        p_think_unclosed = (g["think_unclosed"] | g["base_think_unclosed"]).mean()
+        is_quarantined = p_clean < CLEAN_QUARANTINE_THRESHOLD
+        if is_quarantined:
+            quarantined_cells.add((model, dataset))
+        integrity_rows.append({
+            "model": model, "dataset": dataset, "n": n, "p_clean": p_clean,
+            "p_fallback": p_fallback, "p_think_unclosed": p_think_unclosed,
+            "quarantined": is_quarantined,
+        })
+    integrity_df = pd.DataFrame(integrity_rows).sort_values(["model", "dataset"]).reset_index(drop=True)
+
+    # ---- Contamination panel, per (model, dataset, source, condition):
+    # the "manufactured uptake" quantification — the headline rate computed
+    # over ALL records vs over CLEAN records only ----
+    contamination_rows = []
+    for (model, dataset, source, condition), g in df.groupby(["model", "dataset", "source", "condition"]):
+        n = len(g)
+        n_clean = int(g["clean"].sum())
+        hit_field = hit_field_for_condition(condition)
+        if hit_field in g.columns:
+            rate_all = g[hit_field].astype(bool).mean() if n else float("nan")
+            clean_g = g[g["clean"]]
+            rate_clean = clean_g[hit_field].astype(bool).mean() if len(clean_g) else float("nan")
+        else:
+            rate_all = rate_clean = float("nan")
+        p_truncated = ((g["think_unclosed"]) | (g["parse_method"] != "explicit")).mean()
+        contamination_rows.append({
+            "model": model, "dataset": dataset, "source": source, "condition": condition,
+            "hit_field": hit_field, "n": n, "n_clean": n_clean,
+            "p_clean": n_clean / n if n else float("nan"), "p_truncated": p_truncated,
+            "rate_all": rate_all, "rate_clean": rate_clean,
+        })
+    contamination_df = pd.DataFrame(contamination_rows).sort_values(
+        ["model", "dataset", "source", "condition"]).reset_index(drop=True)
+
+    # ---- restrict to clean, non-quarantined records for everything else ----
+    n_before_clean_filter = len(df)
+    mdkey = list(zip(df["model"], df["dataset"]))
+    df = df[df["clean"] & ~pd.Series(mdkey, index=df.index).isin(quarantined_cells)].copy()
+    n_excluded_dirty_or_quarantined = n_before_clean_filter - len(df)
+    if df.empty:
+        print("[error] After restricting to clean records in non-quarantined (model, dataset) cells, "
+              "no data remains in scope.", file=sys.stderr)
+        sys.exit(1)
+
+    # datasets_seen/multi_dataset/conditions_seen were computed before this
+    # filter (right after --dataset scoping); recompute so everything from
+    # here on (row_label/cell_str closures, missing-cells, etc.) reflects
+    # the post-clean-filter, post-quarantine reality.
+    datasets_seen = sorted(df["dataset"].dropna().unique())
+    multi_dataset = len(datasets_seen) > 1
+    conditions_seen = [c for c in ALL_CONDITIONS if c in set(df["condition"].unique())]
 
     # ---- sanity: recomputed-vs-stored uptake (flip only; uptake is a
     # flip-specific legacy alias for entered_target) ----
@@ -482,7 +650,12 @@ def main(dataset_filter=None):
     table["row"] = [row_label(m, d) for m, d in zip(table["model"], table["dataset"])]
     table.to_csv(out_dir / "uptake_table.csv", index=False)
 
-    # cross-check against results/*.summary.json (recompute is source of truth)
+    # cross-check against the sibling *.summary.json (recompute is source of
+    # truth). `df` is already clean-only at this point, so a summary.json
+    # produced by backfill_parse_flags.py (has_parse_flags=True) is compared
+    # against ITS n_clean/{hit_field}_rate_clean, not the raw (pre-clean-
+    # filter) n/n_uptake — those would trivially "disagree" on every cell
+    # purely because of the clean restriction, which isn't a real discrepancy.
     discrepancies = []
     for (model, dataset, source, condition), g in df.groupby(["model", "dataset", "source", "condition"]):
         source_us = source.replace(" ", "_")
@@ -492,19 +665,40 @@ def main(dataset_filter=None):
             continue
         with summary_fp.open() as f:
             summ = json.load(f)
-        if summ.get("n") != len(g):
-            discrepancies.append({
-                "model": model, "dataset": dataset, "source": source, "condition": condition,
-                "field": "n", "summary_value": summ.get("n"), "recomputed_value": len(g),
-            })
-        if condition == "flip":
-            recomputed_n_uptake = int(g["entered_target"].sum())
-            if summ.get("n_uptake") != recomputed_n_uptake:
+
+        if summ.get("has_parse_flags"):
+            # backfilled summary: compare against ITS clean-restricted fields
+            hit_field = hit_field_for_condition(condition)
+            n_field, expected_n = "n_clean", summ.get("n_clean")
+            if expected_n != len(g):
                 discrepancies.append({
                     "model": model, "dataset": dataset, "source": source, "condition": condition,
-                    "field": "n_uptake", "summary_value": summ.get("n_uptake"),
-                    "recomputed_value": recomputed_n_uptake,
+                    "field": n_field, "summary_value": expected_n, "recomputed_value": len(g),
                 })
+            expected_rate = summ.get(f"{hit_field}_rate_clean")
+            if expected_rate is not None and hit_field in g.columns and len(g):
+                recomputed_rate = g[hit_field].astype(bool).mean()
+                if abs(expected_rate - recomputed_rate) > 1e-9:
+                    discrepancies.append({
+                        "model": model, "dataset": dataset, "source": source, "condition": condition,
+                        "field": f"{hit_field}_rate_clean", "summary_value": expected_rate,
+                        "recomputed_value": recomputed_rate,
+                    })
+        else:
+            # raw (pre-backfill) summary: same check as before this change
+            if summ.get("n") != len(g):
+                discrepancies.append({
+                    "model": model, "dataset": dataset, "source": source, "condition": condition,
+                    "field": "n", "summary_value": summ.get("n"), "recomputed_value": len(g),
+                })
+            if condition == "flip":
+                recomputed_n_uptake = int(g["entered_target"].sum())
+                if summ.get("n_uptake") != recomputed_n_uptake:
+                    discrepancies.append({
+                        "model": model, "dataset": dataset, "source": source, "condition": condition,
+                        "field": "n_uptake", "summary_value": summ.get("n_uptake"),
+                        "recomputed_value": recomputed_n_uptake,
+                    })
 
     # wide "2x2" pivot: P(left_baseline) per (model,dataset,source), one
     # column per condition — the flattened polarity x token-location square.
@@ -798,6 +992,9 @@ def main(dataset_filter=None):
     confound_df = pd.DataFrame(confound_rows)
     confound_df.to_csv(out_dir / "uptake_confounders.csv", index=False)
 
+    integrity_df.to_csv(out_dir / "uptake_parse_integrity.csv", index=False)
+    contamination_df.to_csv(out_dir / "uptake_contamination.csv", index=False)
+
     # ======================================================================
     # Report
     # ======================================================================
@@ -807,6 +1004,39 @@ def main(dataset_filter=None):
     lines.append(f"Generated from `{RESULTS_DIR.relative_to(REPO_ROOT)}`, scope: {scope_str} "
                   f"({len(models)} model(s), {len(sources)} source(s), "
                   f"conditions present: {conditions_seen}).\n")
+
+    lines.append("## Parse integrity\n")
+    if not has_parse_flags:
+        lines.append("**No parse-integrity flags found in scope — every record was treated as clean.** "
+                     f"This is expected only when reading from a pre-backfill directory; run "
+                     f"`python analysis/backfill_parse_flags.py` (writes `results_flagged/`) for a "
+                     f"properly flagged analysis. None of the caveats below apply in that case.\n")
+    else:
+        pct_excluded = n_excluded_dirty_or_quarantined / n_before_clean_filter if n_before_clean_filter else float("nan")
+        lines.append(f"Every headline table/statistic in this report — including all paired stats — is "
+                     f"computed on **clean** records only (both the baseline and hinted generations "
+                     f"produced an explicit, non-truncated answer; see `parsing.classify_parse`). Of "
+                     f"{n_before_clean_filter} records loaded in scope, {n_excluded_dirty_or_quarantined} "
+                     f"({pct_excluded:.1%}) were excluded as dirty or quarantined, leaving {len(df)} clean.\n")
+        lines.append(f"Per-(model,dataset) summary (full table: "
+                     f"`{(out_dir / 'uptake_parse_integrity.csv').relative_to(REPO_ROOT)}`):\n")
+        lines.append("```\n" + integrity_df.round(3).to_string(index=False) + "\n```\n")
+        if quarantined_cells:
+            lines.append(f"**Quarantined (p_clean < {CLEAN_QUARANTINE_THRESHOLD:.0%}) — excluded from "
+                         f"every table/statistic in this report, not just their dirty records:**\n")
+            for model, dataset in sorted(quarantined_cells):
+                row = integrity_df[(integrity_df["model"] == model) & (integrity_df["dataset"] == dataset)].iloc[0]
+                lines.append(f"  - {model}/{dataset}: p_clean={row['p_clean']:.1%} (n={int(row['n'])})")
+        else:
+            lines.append(f"No (model, dataset) cell falls under the {CLEAN_QUARANTINE_THRESHOLD:.0%} "
+                         "clean-rate quarantine threshold.\n")
+        lines.append(f"\nThe **contamination panel** (full table: "
+                     f"`{(out_dir / 'uptake_contamination.csv').relative_to(REPO_ROOT)}`) quantifies the "
+                     "manufactured-uptake artifact directly: per (model, dataset, source, condition), the "
+                     "headline rate (`uptake` for flip, `answer_changed`/left_baseline elsewhere) computed "
+                     "over ALL records vs. over CLEAN records only, plus `p_truncated` (think_unclosed or "
+                     "a non-explicit parse on the hinted side). See the largest `rate_all - rate_clean` "
+                     "gaps there for the cells where this mattered most.\n")
 
     lines.append("## Missing cells\n")
     if missing_by_condition:
@@ -1020,9 +1250,15 @@ def main(dataset_filter=None):
     lines.append("\n## Caveats\n")
     lines.append("- All proportions above are reported with denominator `n`; treat any cell with small "
                  "counts (a handful out of 100) as noisy, especially in the McNemar tests.")
-    lines.append("- `results/*.summary.json` and `results/sweep_summaries.json` were treated as informative, "
+    if has_parse_flags:
+        lines.append("- Every headline number in this report is restricted to `clean` records (see 'Parse "
+                     "integrity' above) — this is not the same population as the original sweep's raw "
+                     "`n=100`. Compare `uptake_contamination.csv`'s rate_all vs rate_clean columns before "
+                     "citing a pre-this-analysis number (e.g. an older report, or results/*.summary.json "
+                     "directly) alongside these.")
+    lines.append("- `*.summary.json` and `results/sweep_summaries.json` were treated as informative, "
                  "not authoritative; all numbers in this report are recomputed from the raw `.jsonl` records.")
-    if not (RESULTS_DIR / "sweep_summaries.json").exists():
+    if not (FALLBACK_RESULTS_DIR / "sweep_summaries.json").exists():
         lines.append("- `results/sweep_summaries.json` does not exist in this run of the sweep; only the "
                      "per-file `*.summary.json` aggregates were available for cross-checking.")
     if dataset_filter is None and multi_dataset:
@@ -1037,20 +1273,25 @@ def main(dataset_filter=None):
 
     for fname in ["uptake_table.csv", "uptake_table_wide.csv", "uptake_pairwise.csv",
                   "uptake_condition_pairwise.csv", "uptake_confounders.csv",
-                  "uptake_neg_other_by_gold.csv", "uptake_heatmap.png", "uptake_report.md"]:
+                  "uptake_neg_other_by_gold.csv", "uptake_parse_integrity.csv",
+                  "uptake_contamination.csv", "uptake_heatmap.png", "uptake_report.md"]:
         print(f"Wrote {out_dir / fname}")
 
 
 def parse_args():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dataset", default=None,
-                    help="Restrict analysis to one dataset present in results/ (e.g. mmlu, medqa); "
+                    help="Restrict analysis to one dataset present in scope (e.g. mmlu, medqa); "
                          "outputs land in analysis/<dataset>/ instead of analysis/. "
                          "Default: aggregate analysis across every dataset found, grouped by "
                          "(model, dataset, source) so same-named sources aren't pooled across datasets.")
+    ap.add_argument("--results-dir", default=None,
+                    help="Directory of result .jsonl files to analyze. Default: results_flagged/ (the "
+                         "output of analysis/backfill_parse_flags.py) if it exists and is non-empty, else "
+                         "results/ with a loud warning that parse-integrity flags will be missing.")
     return ap.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    main(dataset_filter=args.dataset)
+    main(dataset_filter=args.dataset, results_dir_arg=args.results_dir)

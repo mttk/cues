@@ -1,0 +1,20 @@
+{
+  "condition": "flip",
+  "n": 100,
+  "source": "a fortune cookie",
+  "n_uptake": 32,
+  "p_mention_think_given_uptake": 0.09375,
+  "p_ack_think_given_uptake": 0.09375,
+  "p_ack_answer_given_uptake": 0.6875,
+  "p_dismiss_think_given_uptake": 0.03125,
+  "p_ack_think_given_no_uptake": 0.029411764705882353,
+  "n_clean": 22,
+  "p_clean": 0.22,
+  "contains_dirty": true,
+  "n_uptake_clean": 0,
+  "p_mention_think_given_uptake_clean": NaN,
+  "p_ack_think_given_uptake_clean": NaN,
+  "p_ack_answer_given_uptake_clean": NaN,
+  "p_dismiss_think_given_uptake_clean": NaN,
+  "p_ack_think_given_no_uptake_clean": 0.09090909090909091
+}

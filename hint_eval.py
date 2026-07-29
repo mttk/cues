@@ -57,24 +57,9 @@ from cues import (
     make_flip_cue, make_neg_other_cue, make_neg_own_cue, make_placebo_cue,
     pick_flip_letter,
 )
+from parsing import classify_parse, extract_answer, split_channels
+from models import MODELS, THINKING_MODELS
 from qa_datasets import DATASETS, load_qa, validate_subset
-
-# ---------------------------------------------------------------------------
-# Models. `enable_thinking` is only meaningful for Qwen3 hybrid checkpoints
-# (passed to apply_chat_template); OLMo-Think and R1-distill think natively.
-# ---------------------------------------------------------------------------
-MODELS = {
-    "olmo3-7b-instruct":  dict(hf_id="allenai/Olmo-3-7B-Instruct"),
-    "olmo3-7b-think":     dict(hf_id="allenai/Olmo-3-7B-Think"),
-    "qwen3-8b-think":     dict(hf_id="Qwen/Qwen3-8B", enable_thinking=True),
-    "qwen3-8b-nothink":   dict(hf_id="Qwen/Qwen3-8B", enable_thinking=False),
-    "r1-distill-qwen-7b": dict(hf_id="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"),
-}
-
-# Models that think (natively, or via enable_thinking) — long CoTs on
-# gsm_mc/agieval risk running past --max-new-tokens before emitting the
-# final "Answer: X", collapsing the parse rate. See main()'s warning.
-THINKING_MODELS = {"olmo3-7b-think", "qwen3-8b-think", "r1-distill-qwen-7b"}
 
 # sweep.py's --conditions default: negation conditions are opt-in.
 DEFAULT_SWEEP_CONDITIONS = ["flip", "placebo"]
@@ -109,29 +94,6 @@ def build_prompt(q, cue=None):
     options = "\n".join(f"({l}) {c}" for l, c in zip(opts_letters, q["choices"]))
     hint = cue.text if cue is not None else ""
     return PROMPT_TMPL.format(hint=hint, question=q["question"], options=options)
-
-
-def extract_answer(text, n_options):
-    """Last 'Answer: X' wins; fall back to last parenthesised letter. Only
-    letters within the question's actual option range are accepted."""
-    last_letter = string.ascii_uppercase[n_options - 1]
-    letter_class = f"A-{last_letter}"
-    matches = re.findall(rf"[Aa]nswer[:\s]*\(?([{letter_class}])\)?", text)
-    if matches:
-        return matches[-1]
-    matches = re.findall(rf"\(([{letter_class}])\)", text)
-    return matches[-1] if matches else None
-
-
-def split_channels(text):
-    """Return (thinking, answer_text). Handles <think>...</think> style CoT."""
-    m = re.search(r"<think>(.*?)</think>", text, flags=re.S)
-    if m:
-        return m.group(1), text[m.end():]
-    if "</think>" in text:  # some models emit only the closing tag
-        pre, post = text.split("</think>", 1)
-        return pre, post
-    return "", text
 
 
 def mentions_source(text, source):
@@ -204,16 +166,27 @@ def generate(model, tok, prompt, cfg, max_new_tokens):
 
 # ----------------------------- phases --------------------------------------
 
+def _write_baseline_cache(cache_path, base):
+    cache_path = Path(cache_path)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(cache_path, "w") as f:
+        for b in base:
+            f.write(json.dumps(b) + "\n")
+
+
 def run_baseline(model, tok, cfg, data, max_new_tokens, cache_path=None, legacy_cache_paths=None):
     """One unhinted pass; cached to disk so sweeps reuse it across sources.
 
     Reads (in order) `cache_path` and then any `legacy_cache_paths` — the
-    latter lets pre-existing MMLU baseline caches (old naming scheme, no
-    dataset/seed in the filename) stay readable without being renamed.
-    New/refreshed baselines are always written to `cache_path`.
+    latter lets pre-existing baseline caches (old naming schemes) stay
+    readable without being renamed. New/refreshed/reclassified baselines
+    are always (re)written to `cache_path` (the current, `__v2` path).
 
-    Every freshly-generated baseline record is stamped with `max_new_tokens`
-    and a `run_id` (a fresh id per generation batch). On a cache hit, if the
+    Every freshly-generated baseline record is stamped with `max_new_tokens`,
+    a `run_id` (a fresh id per generation batch), and `parse_method` /
+    `think_unclosed` (see classify_parse — disables the parenthesised-letter
+    fallback for thinking models, since on a truncated generation it grabs
+    scratchpad text biased toward the hinted option). On a cache hit, if the
     cached `max_new_tokens` does not match what THIS call requested, the
     cache is treated as a miss and regenerated instead of silently reused —
     this is what a real incident was missing: a baseline cache for
@@ -222,10 +195,18 @@ def run_baseline(model, tok, cfg, data, max_new_tokens, cache_path=None, legacy_
     4096, while already-on-disk condition files from the 1536 era kept
     their old baseline_answer — producing a baseline-era mismatch for the
     idx where the token budget actually changed the model's answer (see
-    analysis/uptake_analysis.py's baseline-era sanity check). Caches that
-    predate this stamp (no `max_new_tokens` key) are still trusted as-is,
-    since compatibility can't be checked either way for them.
+    analysis/uptake_analysis.py's baseline-era sanity check).
+
+    A cache hit whose entries predate `parse_method` (a v1 or pre-dataset-
+    registry cache) is reclassified from its stored `output` text — no GPU
+    needed, `data` supplies each item's option count — rather than trusted
+    at face value: v1 caches were written by the old fallback-always-on
+    extract_answer regardless of model type, so a thinking model's cached
+    `answer` there may be exactly the manufactured-uptake artifact this
+    change exists to fix. The reclassified result is promoted to the `__v2`
+    cache_path so later runs don't pay the reclassification cost again.
     """
+    is_thinking = cfg.get("thinking", False)
     read_candidates = [p for p in ([cache_path] if cache_path else []) + list(legacy_cache_paths or []) if p is not None]
     for candidate in read_candidates:
         candidate = Path(candidate)
@@ -235,27 +216,34 @@ def run_baseline(model, tok, cfg, data, max_new_tokens, cache_path=None, legacy_
             base = [json.loads(l) for l in f]
         if len(base) < len(data):
             continue
+        base = base[: len(data)]
         cached_mnt = base[0].get("max_new_tokens") if base else None
         if cached_mnt is not None and cached_mnt != max_new_tokens:
             print(f"[baseline] cache {candidate} was generated with max_new_tokens={cached_mnt}, "
                  f"but {max_new_tokens} was requested for this run — ignoring and regenerating "
                  f"(prevents mixing baseline eras across conditions).")
             continue
+        if "parse_method" not in base[0]:
+            print(f"[baseline] cache {candidate} predates parse-method flags — reclassifying "
+                 f"{len(base)} cached output(s) from stored text (no GPU needed).")
+            for i, b in enumerate(base):
+                n_opts = len(data[i]["choices"])
+                answer, parse_method, think_unclosed = classify_parse(b["output"], n_opts, is_thinking)
+                b["answer"], b["parse_method"], b["think_unclosed"] = answer, parse_method, think_unclosed
         note = f"max_new_tokens={cached_mnt}" if cached_mnt is not None else "legacy cache, no max_new_tokens stamp"
         print(f"[baseline] reusing cache {candidate} ({note})")
-        return base[: len(data)]
+        if cache_path is not None and Path(candidate) != Path(cache_path):
+            _write_baseline_cache(cache_path, base)  # promote reclassified legacy cache to __v2
+        return base
     run_id = uuid.uuid4().hex[:12]
     base = []
     for i, q in enumerate(tqdm(data, total=len(data), desc="baseline")):
         out = generate(model, tok, build_prompt(q), cfg, max_new_tokens)
-        base.append(dict(idx=i, output=out, answer=extract_answer(out, len(q["choices"])),
-                         max_new_tokens=max_new_tokens, run_id=run_id))
+        answer, parse_method, think_unclosed = classify_parse(out, len(q["choices"]), is_thinking)
+        base.append(dict(idx=i, output=out, answer=answer, parse_method=parse_method,
+                         think_unclosed=think_unclosed, max_new_tokens=max_new_tokens, run_id=run_id))
     if cache_path is not None:
-        cache_path = Path(cache_path)
-        cache_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(cache_path, "w") as f:
-            for b in base:
-                f.write(json.dumps(b) + "\n")
+        _write_baseline_cache(cache_path, base)
     return base
 
 
@@ -314,7 +302,7 @@ def run_condition(model, tok, cfg, data, base, source, condition, seed, max_new_
             continue
 
         hint_out = generate(model, tok, build_prompt(q, cue), cfg, max_new_tokens)
-        hint_ans = extract_answer(hint_out, n_opts)
+        hint_ans, parse_method, think_unclosed = classify_parse(hint_out, n_opts, cfg.get("thinking", False))
         think, answer_text = split_channels(hint_out)
 
         left_baseline = hint_ans != base_ans
@@ -339,11 +327,16 @@ def run_condition(model, tok, cfg, data, base, source, condition, seed, max_new_
             baseline_answer=base_ans,
             baseline_run_id=base[i].get("run_id"),
             baseline_max_new_tokens=base[i].get("max_new_tokens"),
+            base_parse_method=base[i].get("parse_method"),
+            base_think_unclosed=base[i].get("think_unclosed"),
             hint_letter=hint_letter,
             hint_text=cue.text.strip(),
             hint_is_gold=hint_is_gold,
             source=source,
             hinted_answer=hint_ans,
+            parse_method=parse_method,
+            think_unclosed=think_unclosed,
+            clean=(parse_method == "explicit" and base[i].get("parse_method") == "explicit"),
             left_baseline=left_baseline,
             in_target=in_target,
             entered_target=entered_target,
@@ -439,12 +432,26 @@ def result_tag(model, source, dataset, subset, condition):
 
 
 def baseline_cache_path(outdir, model, dataset, subset, n, seed):
+    """The `__v2` suffix marks caches whose records are stamped with
+    parse_method/think_unclosed (see run_baseline / classify_parse) — a v1
+    cache (below) was written by the old fallback-enabled extract_answer
+    for every model, thinking or not, so it can't be trusted at face value
+    for the clean/dirty distinction and must be reclassified from its
+    stored `output` text on load instead of silently reused."""
+    return Path(outdir) / "baselines" / f"{model}__{dataset}__{subset or 'all'}__n{n}__s{seed}__v2.jsonl"
+
+
+def legacy_v1_baseline_cache_path(outdir, model, dataset, subset, n, seed):
+    """Pre-parse-flags baseline cache naming (post-dataset-registry, but no
+    `__v2` suffix / parse_method stamp). Read-only fallback: run_baseline
+    reclassifies every entry from its stored `output` text before use."""
     return Path(outdir) / "baselines" / f"{model}__{dataset}__{subset or 'all'}__n{n}__s{seed}.jsonl"
 
 
 def legacy_mmlu_baseline_cache_path(outdir, model, subset, n):
     """Old baseline cache naming (pre-dataset-registry): no dataset/seed
-    component. Only meaningful (and only checked) for --dataset mmlu."""
+    component. Only meaningful (and only checked) for --dataset mmlu.
+    Also predates parse_method — reclassified on load like the v1 path."""
     return Path(outdir) / "baselines" / f"{model}__{subset}__n{n}.jsonl"
 
 
@@ -530,10 +537,9 @@ def main():
     model, tok, cfg = load_model(args.model)
 
     cache = baseline_cache_path(args.out, args.model, args.dataset, args.subset, args.n, args.seed)
-    legacy_caches = (
-        [legacy_mmlu_baseline_cache_path(args.out, args.model, args.subset, args.n)]
-        if args.dataset == "mmlu" else []
-    )
+    legacy_caches = [legacy_v1_baseline_cache_path(args.out, args.model, args.dataset, args.subset, args.n, args.seed)]
+    if args.dataset == "mmlu":
+        legacy_caches.append(legacy_mmlu_baseline_cache_path(args.out, args.model, args.subset, args.n))
     base = run_baseline(model, tok, cfg, data, args.max_new_tokens,
                         cache_path=cache, legacy_cache_paths=legacy_caches)
     records, n_skipped_condition = run_condition(

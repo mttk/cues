@@ -12,6 +12,11 @@ Originally MMLU-only; generalized to a small MCQA dataset registry
 (`qa_datasets.py`) so the same protocol runs over MedQA, LogiQA 2.0, a GSM8K
 multiple-choice conversion, AGIEval, and MMLU-Pro.
 
+**All analysis numbers must come from `results_flagged/`, not `results/`
+directly** — see "Parse integrity" below for why: a truncated generation's
+answer can be manufactured from scratchpad text, inflating apparent uptake.
+`analysis/uptake_analysis.py` enforces this by default.
+
 ## Install
 
 ```
@@ -19,6 +24,12 @@ pip install torch transformers datasets accelerate tqdm openai
 export HF_TOKEN=...        # optional, for gated models
 export OPENAI_API_KEY=...  # for judge.py
 ```
+
+`analysis/*.py` (the analysis script and both backfill scripts) only need
+`pandas numpy matplotlib tqdm` (`statsmodels` optional) — no `torch`,
+`transformers`, or `openai` — they run entirely without a GPU or an OpenAI
+key. `cues.py`, `parsing.py`, `models.py`, and `qa_datasets.py` are kept
+free of the heavy deps for exactly this reason.
 
 ## Dataset registry (`qa_datasets.py`)
 
@@ -383,22 +394,137 @@ neg_own/neg_other -> P(acknowledges), P(contradicts_cue).
 Writes `{stem}.judged.jsonl` + `{stem}.judged.summary.json`; skips already-
 judged files unless `--overwrite`.
 
+`clean == False` records are skipped by default (a truncated/fallback-parsed
+generation's `hinted_output` is often scratchpad text, not a real committed
+answer — see "Parse integrity" below) and counted in the summary as
+`n_skipped_dirty`; pass `--include-dirty` to judge them anyway. Records that
+predate the `clean` field entirely are always judged (nothing to filter on).
+Existing `*.judged.jsonl` files produced before this field existed can be
+retroactively reclassified with `analysis/backfill_judged_flags.py` (see
+below) — no need to re-judge them.
+
+## Parse integrity (the manufactured-uptake fix)
+
+Answer extraction had a hidden bias: the parenthesised-letter fallback
+(used when no literal `Answer: X` is found) grabs the last option letter
+mentioned *anywhere* in the text. On a **truncated** generation — a
+thinking model that hit the token cap before closing `</think>` — that
+"anywhere" is unfinished scratchpad reasoning, not a committed answer, and
+it's systematically biased toward whatever option the chain of thought was
+discussing when it got cut off (often the hinted one, since the hint is
+usually the most recently introduced option in context). This manufactures
+spurious "uptake": the model looks like it deferred to the hint when it
+never actually finished reasoning at all. On real sweep data this wasn't a
+rare edge case — some (model, dataset) cells had over 90% of their apparent
+"uptake" evaporate once restricted to non-truncated generations.
+
+Fix: `parsing.classify_parse(text, n_options, is_thinking_model)` replaces
+`extract_answer`'s crude call, returning `(answer, parse_method,
+think_unclosed)`:
+- `parse_method`: `"explicit"` (`Answer:\s*\(?X\)?` matched), `"fallback"`
+  (only the parenthesised-letter fallback matched — kept for non-thinking
+  models, which do sometimes phrase answers as "so it must be (B)"), or
+  `"none"`.
+- `think_unclosed`: for thinking models (`MODELS[name]["thinking"]`, see
+  `models.py`), `True` if there's no `</think>` anywhere in the output —
+  regardless of whether an explicit `<think>` opening tag is present, since
+  models like R1-distill start implicitly in think-mode with no opening
+  tag at all, so the *absence of a close* is the truncation signal, not
+  presence of an *open*. `None` for non-thinking models, where the signal
+  isn't meaningful. Kept separate from `parse_method` rather than
+  collapsed into one bool.
+
+**For thinking models, the fallback is disabled entirely**: no `</think>`
+-> answer is `None` outright (`parse_method="none"`); even when there IS a
+`</think>`, only the text after it is scanned, and only for the explicit
+pattern — an `"Answer: (B)"`-looking string appearing *before* the close is
+scratchpad, not a real answer, and doesn't count either.
+
+`clean = (parse_method == "explicit") and (base_parse_method ==
+"explicit")` — both the baseline and hinted generations produced an
+explicit, non-truncated answer. Going forward, every record from
+`hint_eval.py` directly carries `parse_method`/`think_unclosed` (hinted
+side), `base_parse_method`/`base_think_unclosed` (baseline side), and
+`clean`. Baseline caches are versioned `__v2` and stamp the same fields
+per-entry; a `__v2` cache whose `max_new_tokens` doesn't match what's
+requested is regenerated rather than silently reused, and a pre-`__v2`
+cache hit is reclassified from its stored `output` text on load (no GPU
+needed) and promoted to `__v2`.
+
+### Retroactive backfill (no GPU needed)
+
+Existing results predate these fields. Two backfill scripts reclassify
+already-generated `baseline_output`/`hinted_output` text from disk (no
+regeneration, no GPU) and write to a sibling `results_flagged/` directory —
+**`results/` is never modified**:
+
+```
+python analysis/backfill_parse_flags.py    # results/*.jsonl -> results_flagged/
+python analysis/backfill_judged_flags.py   # results/*.judged.jsonl -> results_flagged/
+```
+
+Both add, per record: `parse_method`, `think_unclosed`,
+`base_parse_method`, `base_think_unclosed`, `clean`, and — critically —
+`answer_strict` / `baseline_answer_strict` (what the answer WOULD be under
+today's rules), without ever overwriting `hinted_answer`/`baseline_answer`
+(provenance is preserved; `parse_changed`/`baseline_parse_changed` flag
+where the reclassified answer disagrees with the original).
+`backfill_parse_flags.py` also regenerates each `*.summary.json` with
+`n_clean`, `p_clean`, `n_fallback`, `n_none`, `n_think_unclosed`,
+`n_parse_changed`, and the headline rate computed over all records vs.
+clean records only (`{hit_field}_rate_all` / `{hit_field}_rate_clean`) —
+the per-file console table it prints is this same before/after comparison.
+`backfill_judged_flags.py` similarly marks each judge summary
+`contains_dirty` and adds a `_clean`-suffixed recomputation of every judge
+metric (e.g. `p_ack_answer_given_uptake_clean`) — the qwen-think judged
+batches are known to be heavily dirty; expect their clean-only n to be
+tiny.
+
+Both scripts are idempotent (rerun any time; fully overwrites
+`results_flagged/` deterministically) and need no `torch`/`transformers`/
+`openai` — only `pandas`/`tqdm` — since the reclassification logic lives in
+`parsing.py` and the model registry in `models.py`, both kept
+dependency-light for exactly this.
+
+### Quarantine rule
+
+**All paper numbers must come from `results_flagged/`'s clean subsets, not
+`results/` directly.** `analysis/uptake_analysis.py` defaults to reading
+`results_flagged/` (`--results-dir` overrides; falls back to `results/`
+with a loud warning if the default doesn't exist or is empty — every
+record is then treated as clean, since there's nothing to filter on) and
+restricts every headline table/statistic — including all paired stats — to
+`clean == True` records. Beyond that per-record filter, any `(model,
+dataset)` cell whose *overall* `p_clean` (across every source/condition)
+falls under 70% is **quarantined**: excluded from every table/statistic
+entirely, not just its dirty records, and listed explicitly in the
+report's "Parse integrity" section (never silently dropped).
+`uptake_contamination.csv` is the direct quantification of the artifact
+this whole fix targets — per cell, the headline rate computed over all
+records vs. clean records only, plus `p_truncated` — this is itself a
+paper figure ("manufactured uptake").
+
 ## Analysis (`analysis/uptake_analysis.py`)
 
 ```
-python analysis/uptake_analysis.py                 # aggregate, all datasets present
-python analysis/uptake_analysis.py --dataset mmlu   # scoped to one dataset
+python analysis/uptake_analysis.py                        # aggregate, all datasets present
+python analysis/uptake_analysis.py --dataset mmlu          # scoped to one dataset
+python analysis/uptake_analysis.py --results-dir results   # skip results_flagged/ explicitly
 ```
 
-Loads every condition present in `results/` (flip/placebo/neg_own/neg_other
-— it's fine if only some exist, e.g. before opting into negation sweeps)
-and recomputes the four unified metrics from raw records for every
-`(model, dataset, source, condition)` cell, backfilling them for
-pre-cue-abstraction flip/placebo files that predate `cue_kind` (see
-`backfill_legacy_metrics`). Writes, per scope:
+Loads every condition present (flip/placebo/neg_own/neg_other — it's fine
+if only some exist, e.g. before opting into negation sweeps) from
+`--results-dir` (default `results_flagged/`, the output of
+`analysis/backfill_parse_flags.py` — see "Parse integrity" above; falls
+back to `results/` with a loud warning if that doesn't exist) and
+recomputes the four unified metrics from raw records for every `(model,
+dataset, source, condition)` cell, backfilling them for pre-cue-abstraction
+flip/placebo files that predate `cue_kind` (see `backfill_legacy_metrics`).
+Every headline output below is restricted to `clean` records in
+non-quarantined `(model, dataset)` cells. Writes, per scope:
 - `uptake_table.csv` / `uptake_table_wide.csv` — long-format unified-metrics
-  table, and the "2x2" flattened to one row per cell with a column per
-  condition
+  table (clean only), and the "2x2" flattened to one row per cell with a
+  column per condition
 - `uptake_pairwise.csv` — legacy source-vs-source McNemar within flip
 - `uptake_condition_pairwise.csv` — the new matched contrasts at fixed
   source: `placebo` vs `neg_own` on `left_baseline` (negation semantic
@@ -407,7 +533,16 @@ pre-cue-abstraction flip/placebo files that predate `cue_kind` (see
 - `uptake_neg_other_by_gold.csv` — `neg_other` stratified by
   `neg_target_is_gold`
 - `uptake_confounders.csv` — flip's `baseline_correct`/`hint_is_gold` splits
-- `uptake_heatmap.png` — one panel per condition present, shared color scale
+- `uptake_parse_integrity.csv` — per `(model, dataset)`: `p_clean`,
+  `p_fallback`, `p_think_unclosed`, and whether it was quarantined (see
+  "Parse integrity" above)
+- `uptake_contamination.csv` — the "manufactured uptake" quantification:
+  per `(model, dataset, source, condition)`, the headline rate over ALL
+  records vs. over CLEAN records only, plus `p_truncated` — computed
+  *before* quarantine filtering, so this is where the biggest gaps for a
+  quarantined cell are still visible
+- `uptake_heatmap.png` — one panel per condition present, shared color
+  scale (clean records only)
 - `uptake_report.md` — everything above, plus "priming excess"
   (`P(moved_to_token | neg_other)` vs. the no-cue churn expectation
   `P(left_baseline | placebo) / (n_options - 1)`) and missing-cell/sanity
@@ -423,7 +558,9 @@ in Sanity checks and automatically excluded from every PAIRED statistic
 condition-vs-condition contrasts) — see the "Baseline-era exclusions"
 section of the report for exactly which idx were dropped from where.
 Marginal per-cell rates in the main table are unaffected, since each is
-only ever computed against its own record's baseline.
+only ever computed against its own record's baseline. This detection and
+exclusion runs on the already clean-filtered, non-quarantined population
+(unchanged logic, just applied after the parse-integrity restriction).
 
 ## Still-deliberate simplifications
 

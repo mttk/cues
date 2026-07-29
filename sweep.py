@@ -19,6 +19,7 @@ from pathlib import Path
 from hint_eval import (
     CONDITIONS, DEFAULT_SWEEP_CONDITIONS, MODELS, SOURCES,
     baseline_cache_path, filter_by_length, free_model, legacy_mmlu_baseline_cache_path,
+    legacy_v1_baseline_cache_path,
     load_model, maybe_warn_max_new_tokens, result_tag, run_baseline, run_condition,
     save_results, summarize,
 )
@@ -79,10 +80,9 @@ def main():
         print(f"[{mname}] loading ({len(todo)} cells to run)")
         model, tok, cfg = load_model(mname)
         cache = baseline_cache_path(outdir, mname, args.dataset, args.subset, args.n, args.seed)
-        legacy_caches = (
-            [legacy_mmlu_baseline_cache_path(outdir, mname, args.subset, args.n)]
-            if args.dataset == "mmlu" else []
-        )
+        legacy_caches = [legacy_v1_baseline_cache_path(outdir, mname, args.dataset, args.subset, args.n, args.seed)]
+        if args.dataset == "mmlu":
+            legacy_caches.append(legacy_mmlu_baseline_cache_path(outdir, mname, args.subset, args.n))
         base = run_baseline(model, tok, cfg, data, args.max_new_tokens,
                             cache_path=cache, legacy_cache_paths=legacy_caches)
 

@@ -55,6 +55,97 @@ class TestExtractAnswer(unittest.TestCase):
         self.assertIsNone(he.extract_answer("Answer: C", 2))
 
 
+class TestClassifyParse(unittest.TestCase):
+    """The parse-flags fix: classify_parse must disable the parenthesised-
+    letter fallback for thinking models (it manufactures uptake by reading
+    scratchpad text on a truncated generation), while keeping it for
+    non-thinking models, and it must track think_unclosed separately from
+    parse_method rather than collapsing them into one bool."""
+
+    # ---- non-thinking models: unchanged behavior, fallback stays enabled ----
+
+    def test_nonthinking_explicit(self):
+        ans, method, tu = he.classify_parse("Answer: B", 4, is_thinking_model=False)
+        self.assertEqual((ans, method, tu), ("B", "explicit", None))
+
+    def test_nonthinking_explicit_last_match_wins(self):
+        ans, method, tu = he.classify_parse("Answer: B\nWait, actually Answer: C", 4, False)
+        self.assertEqual((ans, method), ("C", "explicit"))
+
+    def test_nonthinking_fallback_used_when_no_explicit(self):
+        ans, method, tu = he.classify_parse("so it must be (B) given the above", 4, False)
+        self.assertEqual((ans, method, tu), ("B", "fallback", None))
+
+    def test_nonthinking_none_when_nothing_matches(self):
+        ans, method, tu = he.classify_parse("no letter here at all", 4, False)
+        self.assertEqual((ans, method, tu), (None, "none", None))
+
+    def test_nonthinking_out_of_range_letter_rejected(self):
+        ans, method, tu = he.classify_parse("Answer: J", 4, False)
+        self.assertEqual((ans, method), (None, "none"))
+
+    def test_nonthinking_think_unclosed_always_none(self):
+        # even if a non-thinking model's output happens to contain think
+        # tags, think_unclosed isn't a meaningful signal for it.
+        _, _, tu = he.classify_parse("<think>huh</think>Answer: B", 4, False)
+        self.assertIsNone(tu)
+
+    # ---- thinking models: fallback DISABLED, think_unclosed tracked ----
+
+    def test_thinking_explicit_after_closed_think(self):
+        text = "<think>considering A vs B...</think>Answer: B"
+        ans, method, tu = he.classify_parse(text, 4, is_thinking_model=True)
+        self.assertEqual((ans, method, tu), ("B", "explicit", False))
+
+    def test_thinking_bare_closing_tag_no_opening(self):
+        # some models emit only the closing tag; mirrors split_channels.
+        text = "considering A vs B...</think>Answer: B"
+        ans, method, tu = he.classify_parse(text, 4, True)
+        self.assertEqual((ans, method, tu), ("B", "explicit", False))
+
+    def test_thinking_no_closing_tag_is_none_and_unclosed(self):
+        # truncated mid-CoT: no </think> anywhere -> answer=None, parse_method
+        # ="none", think_unclosed=True, regardless of what the raw text says.
+        text = "<think>still reasoning about A, B, and now I think (B) is..."
+        ans, method, tu = he.classify_parse(text, 4, True)
+        self.assertEqual((ans, method, tu), (None, "none", True))
+
+    def test_thinking_no_think_tags_at_all_still_unclosed(self):
+        # "the model always thinks" case (e.g. R1-distill): absence of a
+        # closing tag is the signal, independent of an opening tag ever
+        # having appeared.
+        ans, method, tu = he.classify_parse("Answer: B", 4, True)
+        self.assertEqual((ans, method, tu), (None, "none", True))
+
+    def test_thinking_explicit_match_inside_unclosed_think_block_is_none(self):
+        # THE key case from the spec: "Answer: (B)" appearing before any
+        # </think> in a thinking model's output must yield parse_method="none"
+        # (it's scratchpad text, not a committed answer) even though the
+        # exact same string would parse as explicit for a non-thinking model.
+        text = "<think>hmm, Answer: (B) seems right, but let me reconsider..."
+        ans, method, tu = he.classify_parse(text, 4, is_thinking_model=True)
+        self.assertEqual((ans, method, tu), (None, "none", True))
+        # sanity: the identical text WOULD parse as explicit for a
+        # non-thinking model, proving this is really about is_thinking_model
+        # and not some property of the string itself.
+        ans2, method2, tu2 = he.classify_parse(text, 4, is_thinking_model=False)
+        self.assertEqual((ans2, method2), ("B", "explicit"))
+
+    def test_thinking_fallback_never_used_after_closed_think(self):
+        # closed think block, but only a parenthesised letter (no "Answer:")
+        # after it -> fallback must NOT kick in for a thinking model.
+        text = "<think>reasoning...</think>so it must be (B)"
+        ans, method, tu = he.classify_parse(text, 4, True)
+        self.assertEqual((ans, method, tu), (None, "none", False))
+
+    def test_thinking_ten_option_range_respected(self):
+        text = "<think>...</think>Answer: J"
+        ans, method, tu = he.classify_parse(text, 10, True)
+        self.assertEqual((ans, method), ("J", "explicit"))
+        ans2, method2, tu2 = he.classify_parse(text, 4, True)
+        self.assertEqual((ans2, method2), (None, "none"))
+
+
 class TestBuildPrompt(unittest.TestCase):
     def test_unhinted_has_no_hint_text(self):
         item = q(["x", "y"], 0)
@@ -281,6 +372,71 @@ class TestBaselineEraProtection(unittest.TestCase):
             self.assertEqual(rec["baseline_run_id"], base[0]["run_id"])
 
 
+class TestBaselineReclassification(unittest.TestCase):
+    """A v1 (pre-parse-flags) baseline cache was written by the old
+    fallback-always-on extract_answer, so its cached `answer` for a
+    thinking model may be exactly the manufactured-uptake artifact this
+    change exists to fix. run_baseline must reclassify from stored `output`
+    text on load rather than trust it, and promote the result to the v2
+    cache path."""
+
+    def setUp(self):
+        self.tmpdir = tempfile.TemporaryDirectory()
+        self.v1_path = Path(self.tmpdir.name) / "v1.jsonl"
+        self.v2_path = Path(self.tmpdir.name) / "v2.jsonl"
+        self.data = [q(["a", "b", "c", "d"], 0, qid="q0")]
+
+    def tearDown(self):
+        self.tmpdir.cleanup()
+
+    def _write_v1(self, output, answer):
+        with self.v1_path.open("w") as f:
+            f.write(json.dumps({"idx": 0, "output": output, "answer": answer}) + "\n")
+
+    def test_thinking_model_truncated_answer_nulled_on_reclassify(self):
+        # v1 cache trusted a fallback-derived "B" from an unclosed think
+        # block; reclassifying under the new (fallback-disabled-for-
+        # thinking) rules must null it out.
+        self._write_v1("<think>still going, maybe (B) is close but...", "B")
+        with mock.patch.object(he, "generate") as gen:
+            base = he.run_baseline({"thinking": True}, None, {"thinking": True}, self.data, 1536,
+                                   cache_path=self.v2_path, legacy_cache_paths=[self.v1_path])
+        gen.assert_not_called()
+        self.assertIsNone(base[0]["answer"])
+        self.assertEqual(base[0]["parse_method"], "none")
+        self.assertTrue(base[0]["think_unclosed"])
+
+    def test_nonthinking_model_fallback_answer_preserved_on_reclassify(self):
+        self._write_v1("so it must be (B) given the above", "B")
+        base = he.run_baseline(None, None, {"thinking": False}, self.data, 1536,
+                               cache_path=self.v2_path, legacy_cache_paths=[self.v1_path])
+        self.assertEqual(base[0]["answer"], "B")
+        self.assertEqual(base[0]["parse_method"], "fallback")
+
+    def test_reclassified_cache_promoted_to_v2_path(self):
+        self._write_v1("Answer: B", "B")
+        self.assertFalse(self.v2_path.exists())
+        he.run_baseline(None, None, {"thinking": False}, self.data, 1536,
+                        cache_path=self.v2_path, legacy_cache_paths=[self.v1_path])
+        self.assertTrue(self.v2_path.exists())
+        with self.v2_path.open() as f:
+            promoted = json.loads(f.readline())
+        self.assertEqual(promoted["parse_method"], "explicit")
+
+    def test_v2_cache_hit_not_reclassified_again(self):
+        # a genuine v2 cache already has parse_method -> no reclassification
+        # message, no rewrite needed.
+        with self.v2_path.open("w") as f:
+            f.write(json.dumps({"idx": 0, "output": "Answer: B", "answer": "B",
+                                "parse_method": "explicit", "think_unclosed": None,
+                                "max_new_tokens": 1536, "run_id": "abc"}) + "\n")
+        mtime_before = self.v2_path.stat().st_mtime_ns
+        base = he.run_baseline(None, None, {"thinking": False}, self.data, 1536,
+                               cache_path=self.v2_path)
+        self.assertEqual(base[0]["parse_method"], "explicit")
+        self.assertEqual(self.v2_path.stat().st_mtime_ns, mtime_before)
+
+
 class TestFilterByLength(unittest.TestCase):
     def test_drops_long_questions(self):
         items = [{"question": "short"}, {"question": "x" * 100}]
@@ -304,8 +460,12 @@ class TestResultTagBackwardCompat(unittest.TestCase):
 
 
 class TestBaselineCachePaths(unittest.TestCase):
-    def test_new_format(self):
+    def test_v2_format_has_parse_flags_suffix(self):
         p = he.baseline_cache_path("results", "olmo3-7b-instruct", "medqa", None, 100, 0)
+        self.assertEqual(p.name, "olmo3-7b-instruct__medqa__all__n100__s0__v2.jsonl")
+
+    def test_legacy_v1_format_matches_pre_parse_flags_convention(self):
+        p = he.legacy_v1_baseline_cache_path("results", "olmo3-7b-instruct", "medqa", None, 100, 0)
         self.assertEqual(p.name, "olmo3-7b-instruct__medqa__all__n100__s0.jsonl")
 
     def test_legacy_mmlu_format_matches_old_convention(self):
