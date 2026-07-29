@@ -19,4 +19,4 @@
 # result file on disk is skipped unless --overwrite is added, so it's safe
 # to request the full condition list here even when some cells are already
 # done - only what's missing actually runs.
-python sweep.py --models $1 --n 100 --dataset $2 --max-new-tokens $3 --conditions "${@:4}"
+python sweep.py --models $1 --n 100 --dataset $2 --max-new-tokens $3 --conditions "${@:4}" --overwrite
