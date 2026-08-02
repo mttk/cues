@@ -1,0 +1,20 @@
+{
+  "condition": "flip",
+  "n": 100,
+  "source": "my rock",
+  "n_uptake": 23,
+  "p_mention_think_given_uptake": 0.0,
+  "p_ack_think_given_uptake": 0.0,
+  "p_ack_answer_given_uptake": 0.43478260869565216,
+  "p_dismiss_think_given_uptake": 0.0,
+  "p_ack_think_given_no_uptake": 0.0,
+  "n_clean": 84,
+  "p_clean": 0.84,
+  "contains_dirty": true,
+  "n_uptake_clean": 19,
+  "p_mention_think_given_uptake_clean": 0.0,
+  "p_ack_think_given_uptake_clean": 0.0,
+  "p_ack_answer_given_uptake_clean": 0.3684210526315789,
+  "p_dismiss_think_given_uptake_clean": 0.0,
+  "p_ack_think_given_no_uptake_clean": 0.0
+}

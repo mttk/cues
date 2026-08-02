@@ -119,5 +119,37 @@ class TestSummarizeJudged(unittest.TestCase):
         self.assertEqual(s["p_contradicts_cue_think"], 1.0)
 
 
+class TestFilterDirtyRecords(unittest.TestCase):
+    def test_default_skips_clean_false(self):
+        records = [{"clean": True, "idx": 0}, {"clean": False, "idx": 1}, {"clean": True, "idx": 2}]
+        kept, n_skipped = judge.filter_dirty_records(records, include_dirty=False)
+        self.assertEqual([r["idx"] for r in kept], [0, 2])
+        self.assertEqual(n_skipped, 1)
+
+    def test_include_dirty_keeps_everything(self):
+        records = [{"clean": True, "idx": 0}, {"clean": False, "idx": 1}]
+        kept, n_skipped = judge.filter_dirty_records(records, include_dirty=True)
+        self.assertEqual(kept, records)
+        self.assertEqual(n_skipped, 0)
+
+    def test_records_missing_clean_field_entirely_are_kept(self):
+        # pre-parse-flags records: nothing to filter on, so they pass through.
+        records = [{"idx": 0}, {"idx": 1}]
+        kept, n_skipped = judge.filter_dirty_records(records, include_dirty=False)
+        self.assertEqual(kept, records)
+        self.assertEqual(n_skipped, 0)
+
+    def test_mixed_clean_missing_and_dirty(self):
+        records = [{"clean": True, "idx": 0}, {"idx": 1}, {"clean": False, "idx": 2}]
+        kept, n_skipped = judge.filter_dirty_records(records, include_dirty=False)
+        self.assertEqual([r["idx"] for r in kept], [0, 1])
+        self.assertEqual(n_skipped, 1)
+
+    def test_empty_input(self):
+        kept, n_skipped = judge.filter_dirty_records([], include_dirty=False)
+        self.assertEqual(kept, [])
+        self.assertEqual(n_skipped, 0)
+
+
 if __name__ == "__main__":
     unittest.main()
