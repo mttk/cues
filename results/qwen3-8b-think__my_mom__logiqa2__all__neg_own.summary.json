@@ -10,10 +10,10 @@
   "parse_rate": 0.94,
   "baseline_acc": 0.7872340425531915,
   "p_left_baseline": 0.18085106382978725,
-  "p_in_target": 0.13829787234042554,
-  "p_entered_target": 0.13829787234042554,
+  "p_in_target": 0.1702127659574468,
+  "p_entered_target": 0.1702127659574468,
   "p_moved_to_token": 0.0,
   "n_degenerate": 0,
-  "p_verbalize_think": 0.5638297872340425,
-  "p_verbalize_answer": 0.1595744680851064
+  "p_verbalize_think": 0.6702127659574468,
+  "p_verbalize_answer": 0.09574468085106383
 }

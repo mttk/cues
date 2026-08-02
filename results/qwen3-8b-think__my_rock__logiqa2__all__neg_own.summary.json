@@ -9,11 +9,11 @@
   "n": 94,
   "parse_rate": 0.94,
   "baseline_acc": 0.7872340425531915,
-  "p_left_baseline": 0.19148936170212766,
-  "p_in_target": 0.1595744680851064,
-  "p_entered_target": 0.1595744680851064,
+  "p_left_baseline": 0.18085106382978725,
+  "p_in_target": 0.18085106382978725,
+  "p_entered_target": 0.18085106382978725,
   "p_moved_to_token": 0.0,
   "n_degenerate": 0,
-  "p_verbalize_think": 0.46808510638297873,
-  "p_verbalize_answer": 0.09574468085106383
+  "p_verbalize_think": 0.5425531914893617,
+  "p_verbalize_answer": 0.031914893617021274
 }

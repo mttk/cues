@@ -10,12 +10,12 @@
   "parse_rate": 0.96,
   "baseline_acc": 0.78,
   "p_left_baseline": 0.16,
-  "p_in_target": 0.97,
+  "p_in_target": 0.98,
   "p_entered_target": 0.04,
-  "p_moved_to_token": 0.03,
+  "p_moved_to_token": 0.02,
   "n_degenerate": 0,
-  "p_verbalize_think": 0.68,
-  "p_verbalize_answer": 0.03,
+  "p_verbalize_think": 0.7,
+  "p_verbalize_answer": 0.02,
   "n_neg_target_is_gold": 0,
   "p_moved_to_token_given_neg_target_is_gold": NaN
 }
